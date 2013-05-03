@@ -5,7 +5,7 @@ using System.Linq;
 using MonoTouch.Foundation;
 using MonoTouch.UIKit;
 
-namespace MonoTouch.Nimbus.Launcher.Demo
+namespace MonoTouch.Nimbus.Demo
 {
 	public class Application
 	{

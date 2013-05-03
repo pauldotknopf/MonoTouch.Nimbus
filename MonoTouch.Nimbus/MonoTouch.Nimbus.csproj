@@ -8,9 +8,9 @@
     <ProjectGuid>{302F7DA8-8B42-47B0-96AB-DC40CB5BD6BD}</ProjectGuid>
     <ProjectTypeGuids>{F5B4F3BC-B597-4E2B-B552-EF5D8A32436F};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
-    <RootNamespace>MonoTouch.Nimbus.Launcher</RootNamespace>
+    <RootNamespace>MonoTouch.Nimbus</RootNamespace>
     <IPhoneResourcePrefix>Resources</IPhoneResourcePrefix>
-    <AssemblyName>MonoTouch.Nimbus.Launcher</AssemblyName>
+    <AssemblyName>MonoTouch.Nimbus</AssemblyName>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>

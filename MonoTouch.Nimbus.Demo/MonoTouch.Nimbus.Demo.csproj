@@ -5,12 +5,12 @@
     <Platform Condition=" '$(Platform)' == '' ">iPhoneSimulator</Platform>
     <ProductVersion>10.0.0</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{7911FA8B-346D-471F-B085-D5BB2FE58964}</ProjectGuid>
+    <ProjectGuid>{68EC559D-E44D-45A2-A56D-98A02FC0432A}</ProjectGuid>
     <ProjectTypeGuids>{6BC8ED88-2882-458C-8E55-DFD12B67127B};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <OutputType>Exe</OutputType>
-    <RootNamespace>MonoTouch.Nimbus.Launcher.Demo</RootNamespace>
+    <RootNamespace>MonoTouch.Nimbus.Demo</RootNamespace>
     <IPhoneResourcePrefix>Resources</IPhoneResourcePrefix>
-    <AssemblyName>MonoTouchNimbusLauncherDemo</AssemblyName>
+    <AssemblyName>MonoTouchNimbusDemo</AssemblyName>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|iPhoneSimulator' ">
     <DebugSymbols>true</DebugSymbols>
@@ -23,9 +23,6 @@
     <ConsolePause>false</ConsolePause>
     <MtouchLink>None</MtouchLink>
     <MtouchDebug>true</MtouchDebug>
-    <MtouchExtraArgs>-v -v -v</MtouchExtraArgs>
-    <MtouchI18n />
-    <MtouchArch>ARMv7</MtouchArch>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|iPhoneSimulator' ">
     <DebugType>none</DebugType>
@@ -80,11 +77,13 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.Xml" />
     <Reference Include="System.Core" />
     <Reference Include="monotouch" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\" />
+    <Folder Include="Images\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Info.plist" />
@@ -95,9 +94,12 @@
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
-    <ProjectReference Include="..\MonoTouch.Nimbus.Launcher\MonoTouch.Nimbus.Launcher.csproj">
+    <ProjectReference Include="..\MonoTouch.Nimbus\MonoTouch.Nimbus.csproj">
       <Project>{302F7DA8-8B42-47B0-96AB-DC40CB5BD6BD}</Project>
-      <Name>MonoTouch.Nimbus.Launcher</Name>
+      <Name>MonoTouch.Nimbus</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Images\Icon.png" />
   </ItemGroup>
 </Project>

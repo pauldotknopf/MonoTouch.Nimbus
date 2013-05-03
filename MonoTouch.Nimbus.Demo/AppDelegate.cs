@@ -5,7 +5,7 @@ using System.Linq;
 using MonoTouch.Foundation;
 using MonoTouch.UIKit;
 
-namespace MonoTouch.Nimbus.Launcher.Demo
+namespace MonoTouch.Nimbus.Demo
 {
 	// The UIApplicationDelegate for the application. This class is responsible for launching the 
 	// User Interface of the application, as well as listening (and optionally responding) to 
@@ -30,7 +30,9 @@ namespace MonoTouch.Nimbus.Launcher.Demo
 			
 			// If you have defined a root view controller, set it here:
 			// window.RootViewController = myViewController;
-            window.RootViewController = new MonoTouch.Nimbus.Launcher.NILauncherViewController();;
+
+			var image = UIImage.FromFile("Images/Icon.png");
+			var launcherViewObject = new MonoTouch.Nimbus.NILauncherViewObject(new NSString("title"), image);
 
 			// make the window visible
 			window.MakeKeyAndVisible ();
