@@ -24,3 +24,24 @@ Nimbus encourages using modules as needed. To make things simpler, there will be
 There are many modules/classes/protocols and I am only one person. I will be creating bindings on an as needed basis (for my current project). Below is a list of all the modules with an indication as to what module has bindings. 
 
 I encourage you to add bindings to items/modules as you need them! The goal here is to share the Nimbus goodness with the community!
+
+* Core - __PARTIALLY__ (as needed per other modules)
+* NetworkImage - __DONE__
+* Badge - NOT DONE
+* Collections - NOT DONE
+* Css - NOT DONE
+* InterApp - NOT DONE
+* Launcher - NOT DONE
+* Models - NOT DONE
+* NetworkControllers - NOT DONE
+* Overview - NOT DONE
+* PagingScrollView - NOT DONE
+* Photos - NOT DONE
+* TextField - NOT DONE
+* WebController - NOT DONE
+
+As you can see, there isn't a lot done at the moment, but the universal library is built and ready for bindings to be added. Simply clone this repo and add your bindings! I will be adding more because my project requires 4-5 of the modules.
+
+__NOTE__: Xamarin released a new tool that makes creating bindings VERY easy. It is called ObjectiveSharpie. Checkout it out!
+
+http://docs.xamarin.com/guides/ios/advanced_topics/binding_objective-c_libraries/objective_sharpie
