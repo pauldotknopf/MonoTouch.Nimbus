@@ -2,132 +2,190 @@ using System;
 using MonoTouch.UIKit;
 using MonoTouch.Foundation;
 using System.Drawing;
+using MonoTouch.CoreGraphics;
 
 namespace MonoTouch.Nimbus
 {
 	#region Core
+
+	//typedef void (^NIOperationBlock)(NIOperation* operation);
+	public delegate void NIOperationBlock(NIOperation operation);
+	//typedef void (^NIOperationDidFailBlock)(NIOperation* operation, NSError* error);
+	public delegate void NIOperationDidFailBlock(NIOperation operation, NSError error);
+
+	[BaseType (typeof (NSOperation))]
+	public partial interface NIOperation {
+		
+		[Export ("delegate"), NullAllowed]
+		NSObject WeakDelegate { get; set; }
+
+		[Wrap("WeakDelegate")]
+		NIOperationDelegate Delegate { get; set; }
+
+		[Export ("lastError")]
+		NSError LastError { get; }
+		
+		[Export ("tag")]
+		int Tag { get; set; }
+		
+		[Export ("didStartBlock")]
+		NIOperationBlock DidStartBlock { get; set; }
+		
+		[Export ("didFinishBlock")]
+		NIOperationBlock DidFinishBlock { get; set; }
+		
+		[Export ("didFailWithErrorBlock")]
+		NIOperationDidFailBlock DidFailWithErrorBlock { get; set; }
+		
+		[Export ("willFinishBlock")]
+		NIOperationBlock WillFinishBlock { get; set; }
+		
+		[Export ("didStart")]
+		void DidStart ();
+		
+		[Export ("didFinish")]
+		void DidFinish ();
+		
+		[Export ("didFailWithError:")]
+		void DidFailWithError (NSError error);
+		
+		[Export ("willFinish")]
+		void WillFinish ();
+	}
 	
+	[Model]
+	[BaseType(typeof(NSObject))]
+	public partial interface NIOperationDelegate {
+		
+		[Export ("nimbusOperationDidStart:")]
+		void NimbusOperationDidStart (NIOperation operation);
+		
+		[Export ("nimbusOperationWillFinish:")]
+		void NimbusOperationWillFinish (NIOperation operation);
+		
+		[Export ("nimbusOperationDidFinish:")]
+		void NimbusOperationDidFinish (NIOperation operation);
+		
+		[Export ("nimbusOperationDidFail:withError:")]
+		void NimbusOperationDidFail (NIOperation operation, NSError error);
+	}
+
 	#endregion
 
-	#region Launcher
+	#region NetworkImage
 
-	#region NILauncherButtonView
-
-	#endregion
-
-	#region NILauncherPageView
-
-	#endregion
-
-	#region NILauncherView
-
-	[BaseType (typeof (UIView))]
-	interface NILauncherView {
-		[Export ("contentInsetForPages")]
-		UIEdgeInsets ContentInsetForPages { get; set;  }
+	[Model]
+	[BaseType(typeof(NSObject))]
+	public partial interface NINetworkImageOperation {
 		
-		[Export ("buttonSize")]
-		SizeF ButtonSize { get; set;  }
+		[Export ("cacheIdentifier")]
+		string CacheIdentifier { get; }
 		
-		[Export ("numberOfRows")]
-		int NumberOfRows { get; set;  }
+		[Export ("imageCropRect")]
+		RectangleF ImageCropRect { get; set; }
 		
-		[Export ("numberOfColumns")]
-		int NumberOfColumns { get; set;  }
+		[Export ("imageDisplaySize")]
+		SizeF ImageDisplaySize { get; set; }
 		
-		[Export ("delegate", ArgumentSemantic.Assign)][NullAllowed]
+		[Export ("scaleOptions")]
+		NINetworkImageViewScaleOptions ScaleOptions { get; set; }
+		
+		[Export ("interpolationQuality")]
+		CGInterpolationQuality InterpolationQuality { get; set; }
+		
+		[Export ("imageContentMode")]
+		UIViewContentMode ImageContentMode { get; set; }
+		
+		[Export ("imageCroppedAndSizedForDisplay")]
+		UIImage ImageCroppedAndSizedForDisplay { get; set; }
+	}
+
+	[BaseType (typeof (UIImageView))]
+	public partial interface NINetworkImageView : NIOperationDelegate {
+
+		[Export ("delegate"), NullAllowed]
 		NSObject WeakDelegate { get; set; }
 		
-		[Wrap ("WeakDelegate")][NullAllowed]
- 		NILauncherDelegate Delegate { get; set; }
+		[Wrap("WeakDelegate")]
+		NINetworkImageViewDelegate Delegate { get; set; }
+
+		[Export ("initWithImage:")]
+		IntPtr Constructor (UIImage image);
 		
-		[Export ("dataSource")]
-		id<NILauncherDataSource> DataSource { get; set;  }
+		[Export ("initialImage")]
+		UIImage InitialImage { get; set; }
 		
-		[Export ("reloadData")]
-		void ReloadData ();
+		[Export ("sizeForDisplay")]
+		bool SizeForDisplay { get; set; }
 		
-		[Export ("dequeueReusableViewWithIdentifier:")]
-		UIView<NILauncherButtonView> DequeueReusableViewWithIdentifier (string identifier);
+		[Export ("scaleOptions")]
+		NINetworkImageViewScaleOptions ScaleOptions { get; set; }
 		
-		[Export ("willRotateToInterfaceOrientation:duration:")]
-		void WillRotateToInterfaceOrientationduration (UIInterfaceOrientation toInterfaceOrientation, double duration);
+		[Export ("interpolationQuality")]
+		CGInterpolationQuality InterpolationQuality { get; set; }
 		
-		[Export ("willAnimateRotationToInterfaceOrientation:duration:")]
-		void WillAnimateRotationToInterfaceOrientationduration (UIInterfaceOrientation toInterfaceOrientation, double duration);
+//		[Export ("imageMemoryCache")]
+//		NIImageMemoryCache ImageMemoryCache { get; set; }
 		
+		[Export ("networkOperationQueue")]
+		NSOperationQueue NetworkOperationQueue { get; set; }
+		
+		[Export ("maxAge")]
+		double MaxAge { get; set; }
+		
+		[Export ("pathToNetworkImage")]
+		string PathToNetworkImage { set; }
+		
+		[Export ("setPathToNetworkImage:forDisplaySize:")]
+		void SetPathToNetworkImage (string pathToNetworkImage, SizeF displaySize);
+
+		[Export ("setPathToNetworkImage:forDisplaySize:contentMode:")]
+		void SetPathToNetworkImage (string pathToNetworkImage, SizeF displaySize, UIViewContentMode contentMode);
+		
+		[Export ("setPathToNetworkImage:forDisplaySize:contentMode:cropRect:")]
+		void SetPathToNetworkImage (string pathToNetworkImage, SizeF displaySize, UIViewContentMode contentMode, RectangleF cropRect);
+		
+		[Export ("setPathToNetworkImage:cropRect:")]
+		void SetPathToNetworkImage (string pathToNetworkImage, RectangleF cropRect);
+		
+		[Export ("setPathToNetworkImage:contentMode:")]
+		void SetPathToNetworkImage (string pathToNetworkImage, UIViewContentMode contentMode);
+		
+		[Export ("setNetworkImageOperation:forDisplaySize:contentMode:cropRect:")]
+		void SetNetworkImageOperation (NINetworkImageOperation operation, SizeF displaySize, UIViewContentMode contentMode, RectangleF cropRect);
+		
+		[Export ("loading")]
+		bool Loading { [Bind ("isLoading")] get; }
+		
+		[Export ("prepareForReuse")]
+		void PrepareForReuse ();
+		
+		[Export ("networkImageViewDidStartLoading")]
+		void NetworkImageViewDidStartLoading ();
+		
+		[Export ("networkImageViewDidLoadImage:")]
+		void NetworkImageViewDidLoadImage (UIImage image);
+		
+		[Export ("networkImageViewDidFailWithError:")]
+		void NetworkImageViewDidFailWithError (NSError error);
 	}
-	
-	[BaseType (typeof ())]
+
 	[Model]
-	interface NILauncherDataSource {
-		[Abstract]
-		[Export ("launcherView:numberOfButtonsInPage:")]
-		int LauncherViewnumberOfButtonsInPage (NILauncherView launcherView, int page);
+	[BaseType(typeof(NSObject))]
+	public partial interface NINetworkImageViewDelegate  {
 		
-		[Abstract]
-		[Export ("launcherView:buttonViewForPage:atIndex:")]
-		 UIView<NILauncherButtonView> LauncherViewbuttonViewForPageatIndex (NILauncherView launcherView, int page, int index);
+		[Export ("networkImageViewDidStartLoad:")]
+		void NetworkImageViewDidStartLoad (NINetworkImageView imageView);
 		
-		[Abstract]
-		[Export ("numberOfPagesInLauncherView:")]
-		int NumberOfPagesInLauncherView (NILauncherView launcherView);
+		[Export ("networkImageView:didLoadImage:")]
+		void NetworkImageViewDidLoadImage (NINetworkImageView imageView, UIImage image);
 		
-		[Abstract]
-		[Export ("numberOfRowsPerPageInLauncherView:")]
-		int NumberOfRowsPerPageInLauncherView (NILauncherView launcherView);
+		[Export ("networkImageView:didFailWithError:")]
+		void NetworkImageViewDidFailWithError (NINetworkImageView imageView, NSError error);
 		
-		[Abstract]
-		[Export ("numberOfColumnsPerPageInLauncherView:")]
-		int NumberOfColumnsPerPageInLauncherView (NILauncherView launcherView);
-		
+		[Export ("networkImageView:readBytes:totalBytes:")]
+		void NetworkImageViewReadBytes (NINetworkImageView imageView, long readBytes, long totalBytes);
 	}
-	
-	[BaseType (typeof (NSObject))]
-	[Model]
-	interface NILauncherDelegate {
-		[Export ("launcherView:didSelectItemOnPage:atIndex:")]
-		void LauncherViewdidSelectItemOnPageatIndex (NILauncherView launcherView, int page, int index);
-		
-	}
-	
-	[BaseType (typeof ())]
-	[Model]
-	interface NILauncherButtonView {
-		[Abstract]
-		[Export ("button")]
-		UIButton Button { get; set;  }
-		
-	}
-
-	#endregion
-
-	#region NILauncherViewController
-
-	[BaseType (typeof (UIViewController))]
-	interface NILauncherViewController {
-	}
-
-	#endregion
-
-	#region NILauncherViewModel
-
-	#endregion
-
-	#region NILauncherViewObject
-
-	[BaseType (typeof (NSObject))]
-	interface NILauncherViewObject {
-		[Export ("initWithTitle:image:")]
-		NSObject InitWithTitleimage (string title, UIImage image);
-		
-		[Static]
-		[Export ("objectWithTitle:image:")]
-		NSObject ObjectWithTitleimage (string title, UIImage image);
-		
-	}
-
-	#endregion
 
 	#endregion
 }

@@ -4,6 +4,9 @@ using System.Linq;
 
 using MonoTouch.Foundation;
 using MonoTouch.UIKit;
+using MonoTouch.Nimbus;
+using System.Drawing;
+
 
 namespace MonoTouch.Nimbus.Demo
 {
@@ -32,12 +35,38 @@ namespace MonoTouch.Nimbus.Demo
 			// window.RootViewController = myViewController;
 
 			var image = UIImage.FromFile("Images/Icon.png");
-			var launcherViewObject = new MonoTouch.Nimbus.NILauncherViewObject(new NSString("title"), image);
 
-			// make the window visible
+			var imageView = new NINetworkImageView(image);
+			imageView.Delegate = new NetworkDelegate();
+			imageView.Frame = window.Frame;
+			window.AddSubview(imageView);
+			imageView.SetPathToNetworkImage("http://www.google.com/images/srpr/logo4w.png", new SizeF(window.Frame.Width, window.Frame.Height), UIViewContentMode.ScaleAspectFit);
 			window.MakeKeyAndVisible ();
 			
 			return true;
+		}
+
+		public class NetworkDelegate : NINetworkImageViewDelegate
+		{
+			public override void NetworkImageViewDidFailWithError (NINetworkImageView imageView, NSError error)
+			{
+
+			}
+
+			public override void NetworkImageViewDidLoadImage (NINetworkImageView imageView, UIImage image)
+			{
+
+			}
+
+			public override void NetworkImageViewDidStartLoad (NINetworkImageView imageView)
+			{
+
+			}
+
+			public override void NetworkImageViewReadBytes (NINetworkImageView imageView, long readBytes, long totalBytes)
+			{
+
+			}
 		}
 	}
 }
