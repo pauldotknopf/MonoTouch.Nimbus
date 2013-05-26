@@ -1,0 +1,3 @@
+[submodule "SubModules/Nimbus-Universal"]
+	path = SubModules/Nimbus-Universal
+	url = https://github.com/theonlylawislove/Nimbus-Universal.git
