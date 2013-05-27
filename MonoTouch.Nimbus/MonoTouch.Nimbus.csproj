@@ -47,7 +47,9 @@
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Xamarin.ObjcBinding.CSharp.targets" />
   <ItemGroup>
-    <ObjcBindingNativeLibrary Include="libNimbus.a" />
+    <ObjcBindingNativeLibrary Include="..\SubModules\Nimbus-Universal\Released\Universal\libNimbus.a">
+      <Link>libNimbus.a</Link>
+    </ObjcBindingNativeLibrary>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="libNimbus.linkwith.cs">

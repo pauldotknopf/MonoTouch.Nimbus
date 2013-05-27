@@ -5,15 +5,3 @@ using MonoTouch.ObjCRuntime;
                      LinkTarget.ArmV7 | LinkTarget.Simulator, 
                      ForceLoad = true,
                      Frameworks = "Foundation UIKit QuartzCore CoreText")]
-
-
-// 	core
-// 		Foundation.framework
-//		UIKit.framework
-// 	pagingscrollview
-//		Foundation.framework
-//		UIKit.framework
-//	launcher
-//		Foundation.framework
-//		UIKit.framework
-//		QuartzCore.framework
