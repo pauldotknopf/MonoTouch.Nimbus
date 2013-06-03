@@ -26,6 +26,9 @@ There are many modules/classes/protocols and I am only one person. I will be cre
 I encourage you to add bindings to items/modules as you need them! The goal here is to share the Nimbus goodness with the community!
 
 * Core - __PARTIALLY__ (as needed per other modules)
+  * Operations - __DONE__
+  * ViewRecycler - __DONE__
+  * Otherse - NOT DONE
 * NetworkImage - __DONE__
 * Badge - NOT DONE
 * Collections - NOT DONE
