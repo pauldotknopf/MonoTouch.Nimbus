@@ -7,5 +7,10 @@ namespace MonoTouch.Nimbus
 		NINetworkImageViewScaleToFitCropsExcess = 1,
 		NINetworkImageViewScaleToFillLeavesExcess = 2
 	}
+
+	public enum NIPagingScrollViewType {
+		NIPagingScrollViewHorizontal = 0,
+		NIPagingScrollViewVertical = 1
+	}
 }
 

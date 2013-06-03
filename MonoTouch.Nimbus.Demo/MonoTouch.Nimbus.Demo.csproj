@@ -84,13 +84,17 @@
   <ItemGroup>
     <Folder Include="Resources\" />
     <Folder Include="Images\" />
+    <Folder Include="PagingScrollView\" />
+    <Folder Include="ViewRecycling\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Info.plist" />
+    <None Include="PagingScrollView\BasicInstantiationPagingScrollViewController.cs" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Main.cs" />
     <Compile Include="AppDelegate.cs" />
+    <Compile Include="ViewRecycling\ViewRecyclingController.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

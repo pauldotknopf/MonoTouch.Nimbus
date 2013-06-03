@@ -34,13 +34,7 @@ namespace MonoTouch.Nimbus.Demo
 			// If you have defined a root view controller, set it here:
 			// window.RootViewController = myViewController;
 
-			var image = UIImage.FromFile("Images/Icon.png");
-
-			var imageView = new NINetworkImageView(image);
-			imageView.Delegate = new NetworkDelegate();
-			imageView.Frame = window.Frame;
-			window.AddSubview(imageView);
-			imageView.SetPathToNetworkImage("http://www.google.com/images/srpr/logo4w.png", new SizeF(window.Frame.Width, window.Frame.Height), UIViewContentMode.ScaleAspectFit);
+			window.RootViewController = new ViewRecyclingController ();
 			window.MakeKeyAndVisible ();
 			
 			return true;
