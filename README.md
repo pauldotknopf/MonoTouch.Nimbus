@@ -38,7 +38,7 @@ I encourage you to add bindings to items/modules as you need them! The goal here
 * Models - NOT DONE
 * NetworkControllers - NOT DONE
 * Overview - NOT DONE
-* PagingScrollView - NOT DONE
+* PagingScrollView - __DONE__
 * Photos - NOT DONE
 * TextField - NOT DONE
 * WebController - NOT DONE
