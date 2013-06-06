@@ -89,21 +89,21 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Info.plist" />
-    <None Include="PagingScrollView\BasicInstantiationPagingScrollViewController.cs" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Main.cs" />
     <Compile Include="AppDelegate.cs" />
     <Compile Include="ViewRecycling\ViewRecyclingController.cs" />
+    <Compile Include="PagingScrollView\BasicInstantiationPagingScrollViewController.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <Content Include="Images\Icon.png" />
+  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MonoTouch.Nimbus\MonoTouch.Nimbus.csproj">
       <Project>{302F7DA8-8B42-47B0-96AB-DC40CB5BD6BD}</Project>
       <Name>MonoTouch.Nimbus</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Images\Icon.png" />
   </ItemGroup>
 </Project>

@@ -23,10 +23,13 @@ namespace MonoTouch.Nimbus.Demo
 			_pagingScrollView.Frame = View.Frame;
 			_pagingScrollView.AutoresizingMask = UIViewAutoresizing.All;
 			_pagingScrollView.WeakDataSource = this;
-
+			//_pagingScrollView.LoadPageAtIndex (0);
 			View.AddSubview (_pagingScrollView);
 
 			_pagingScrollView.ReloadData ();
+
+			var o = new Object ();
+			var dfg = 2+2;
 		}
 
 		public override void DidReceiveMemoryWarning ()
@@ -47,45 +50,85 @@ namespace MonoTouch.Nimbus.Demo
 			_pagingScrollView.WillAnimateRotationToInterfaceOrientation (toInterfaceOrientation, duration);
 		}
 
-		[Export ("pagingScrollView:pageViewForIndex:")]
+		[Export ("numberOfPagesInPagingScrollView:")]
 		public int NumberOfPagesInPagingScrollView (NIPagingScrollView pagingScrollView)
 		{
 			return 10;
 		}
 
-		SamplePageView _testView = new SamplePageView("test");
-		[Export ("numberOfPagesInPagingScrollView:")]
+		[Export ("pagingScrollView:pageViewForIndex:")]
 		public UIView PagingScrollView (NIPagingScrollView pagingScrollView, int pageIndex)
 		{
-			return _testView;
-//			var pageView = _pagingScrollView.DequeueReusablePageWithIdentifier (pageReuseIdentifier);
-//			if (pageView == null) {
-//				pageView = new SamplePageView (pageReuseIdentifier);
-//			}
-//			return pageView;
+			var pageView = _pagingScrollView.DequeueReusablePageWithIdentifier (pageReuseIdentifier);
+			if (pageView == null) {
+				pageView = new SamplePageView (pageReuseIdentifier);
+			}
+			return pageView;
 		}
 
-		public class SamplePageView : NIRecyclableView
+
+		public class SamplePageView : NIPageView
 		{
-			// Designated initializer.
-			//- (id)initWithReuseIdentifier:(NSString *)reuseIdentifier;
+			UILabel _label;
+			public SamplePageView (string identifier)
+				:base()
+			{
+				ReuseIdentifier = identifier;
+				_label = new UILabel(Frame);
+				_label.AutoresizingMask = UIViewAutoresizing.FlexibleDimensions;
+				_label.Font = UIFont.SystemFontOfSize(26);
+				_label.TextAlignment = UITextAlignment.Center;
+				_label.BackgroundColor = UIColor.Clear;
+			}
 
+			public override int PageIndex {
+				get {
+					return base.PageIndex;
+				}
+				set {
+					_label.Text = "This is page " + value;
+					UIColor bgColor;
+					UIColor textColor;
+					switch(PageIndex % 4)
+					{
+					case 0:
+						bgColor = UIColor.Red;
+						textColor = UIColor.White;
+						break;
+					case 1:
+						bgColor = UIColor.Blue;
+						textColor = UIColor.White;
+						break;
+					case 2:
+						bgColor = UIColor.Yellow;
+						textColor = UIColor.Black;
+						break;
+					default:
+						bgColor = UIColor.Green;
+						textColor = UIColor.Black;
+						break;
+					}
+					BackgroundColor = bgColor;
+					_label.TextColor = textColor;
+					SetNeedsLayout ();
 
-			public SamplePageView (string reuseIdentifier)
-				:base(reuseIdentifier)
+					base.PageIndex = value;
+				}
+			}
+
+			public override void PageDidDisappear ()
 			{
 			}
 
-//			string reuseIdentifier;
-//			[Export ("reuseIdentifier")]
-//			public string ReuseIdentifier {
-//				get {
-//					return reuseIdentifier;
-//				}
-//				set {
-//					reuseIdentifier = value;
-//				}
-//			}
+			public override NSObject FrameAndMaintainState {
+				set {
+
+				}
+			}
+
+			public override void PrepareForReuse ()
+			{
+			}
 		}
 	}
 }
