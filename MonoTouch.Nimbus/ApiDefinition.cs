@@ -131,11 +131,12 @@ namespace MonoTouch.Nimbus
 	[BaseType (typeof (NIRecyclableView))]
 	public partial interface NIPageView : NIPagingScrollViewPage 
 	{
-		[Field ("NIPagingScrollViewUnknownNumberOfPages")]
-		int NIPagingScrollViewUnknownNumberOfPages { get; }
+		// TODO: Bug somewhere in btouch. This fields were causing a build error. http://stackoverflow.com/questions/16952194/monotouch-binding-project-build-errors
+		//[Field ("NIPagingScrollViewUnknownNumberOfPages")]
+		//int NIPagingScrollViewUnknownNumberOfPages { get; }
 
-		[Field ("NIPagingScrollViewDefaultPageMargin")]
-		float NIPagingScrollViewDefaultPageMargin { get; }
+		//[Field ("NIPagingScrollViewDefaultPageMargin")]
+		//float NIPagingScrollViewDefaultPageMargin { get; }
 	}
 
 	[BaseType (typeof (UIView))]
@@ -222,6 +223,7 @@ namespace MonoTouch.Nimbus
 	}
 
 	[Model]
+	[BaseType(typeof(NSObject))]
 	public partial interface NIPagingScrollViewDataSource {
 
 		[Export ("numberOfPagesInPagingScrollView:")]
