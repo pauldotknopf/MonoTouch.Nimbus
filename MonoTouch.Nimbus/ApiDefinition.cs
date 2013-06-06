@@ -126,7 +126,7 @@ namespace MonoTouch.Nimbus
 
 	#endregion
 
-	#region Paging
+	#region PagingScrollView
 
 	[BaseType (typeof (NIRecyclableView))]
 	public partial interface NIPageView : NIPagingScrollViewPage 
@@ -259,7 +259,7 @@ namespace MonoTouch.Nimbus
 		NSObject FrameAndMaintainState { set; }
 	}
 
-   	#endregion
+	#endregion
 
 	#region NetworkImage
 

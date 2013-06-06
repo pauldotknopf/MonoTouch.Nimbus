@@ -23,13 +23,9 @@ namespace MonoTouch.Nimbus.Demo
 			_pagingScrollView.Frame = View.Frame;
 			_pagingScrollView.AutoresizingMask = UIViewAutoresizing.All;
 			_pagingScrollView.WeakDataSource = this;
-			//_pagingScrollView.LoadPageAtIndex (0);
 			View.AddSubview (_pagingScrollView);
 
 			_pagingScrollView.ReloadData ();
-
-			var o = new Object ();
-			var dfg = 2+2;
 		}
 
 		public override void DidReceiveMemoryWarning ()
@@ -66,10 +62,10 @@ namespace MonoTouch.Nimbus.Demo
 			return pageView;
 		}
 
-
 		public class SamplePageView : NIPageView
 		{
 			UILabel _label;
+
 			public SamplePageView (string identifier)
 				:base()
 			{
@@ -79,6 +75,7 @@ namespace MonoTouch.Nimbus.Demo
 				_label.Font = UIFont.SystemFontOfSize(26);
 				_label.TextAlignment = UITextAlignment.Center;
 				_label.BackgroundColor = UIColor.Clear;
+				AddSubview(_label);
 			}
 
 			public override int PageIndex {
@@ -89,7 +86,7 @@ namespace MonoTouch.Nimbus.Demo
 					_label.Text = "This is page " + value;
 					UIColor bgColor;
 					UIColor textColor;
-					switch(PageIndex % 4)
+					switch(value % 4)
 					{
 					case 0:
 						bgColor = UIColor.Red;
