@@ -28,20 +28,21 @@ I encourage you to add bindings to items/modules as you need them! The goal here
 * Core - __PARTIALLY__ (as needed per other modules)
   * Operations - __DONE__
   * ViewRecycler - __DONE__
-  * Otherse - NOT DONE
+  * NIInMemoryCache/NIImageCache - __DONE__
+  * Others - not done
 * NetworkImage - __DONE__
-* Badge - NOT DONE
-* Collections - NOT DONE
-* Css - NOT DONE
-* InterApp - NOT DONE
-* Launcher - NOT DONE
-* Models - NOT DONE
-* NetworkControllers - NOT DONE
-* Overview - NOT DONE
+* Badge - not done
+* Collections - not done
+* Css - not done
+* InterApp - not done
+* Launcher - not done
+* Models - not done
+* NetworkControllers - not done
+* Overview - not done
 * PagingScrollView - __DONE__
-* Photos - NOT DONE
-* TextField - NOT DONE
-* WebController - NOT DONE
+* Photos - __DONE__
+* TextField - not done
+* WebController - not done
 
 As you can see, there isn't a lot done at the moment, but the universal library is built and ready for bindings to be added. Simply clone this repo and add your bindings! I will be adding more because my project requires 4-5 of the modules.
 
