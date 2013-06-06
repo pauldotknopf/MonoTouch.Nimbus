@@ -12,5 +12,11 @@ namespace MonoTouch.Nimbus
 		NIPagingScrollViewHorizontal = 0,
 		NIPagingScrollViewVertical = 1
 	}
+
+	public enum NIPhotoScrollViewPhotoSize {
+		NIPhotoScrollViewPhotoSizeUnknown = 0,
+		NIPhotoScrollViewPhotoSizeThumbnail = 1,
+		NIPhotoScrollViewPhotoSizeOriginal = 2
+	}
 }
 

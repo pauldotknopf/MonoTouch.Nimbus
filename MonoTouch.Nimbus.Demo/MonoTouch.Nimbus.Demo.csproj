@@ -80,15 +80,20 @@
     <Reference Include="System.Xml" />
     <Reference Include="System.Core" />
     <Reference Include="monotouch" />
+    <Reference Include="MonoTouch.Dialog-1" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\" />
     <Folder Include="Images\" />
     <Folder Include="PagingScrollView\" />
     <Folder Include="ViewRecycling\" />
+    <Folder Include="Photos\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Info.plist" />
+    <None Include="Photos\NetworkPhotoAlbumViewController.cs" />
+    <None Include="Photos\PhotosCatalogController.cs" />
+    <None Include="Photos\PhotosDribblePhotoAlbumViewController.cs" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Main.cs" />
@@ -105,5 +110,12 @@
       <Project>{302F7DA8-8B42-47B0-96AB-DC40CB5BD6BD}</Project>
       <Name>MonoTouch.Nimbus</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="NimbusPhotos.bundle\gfx\default.png" />
+    <BundleResource Include="NimbusPhotos.bundle\gfx\next.png" />
+    <BundleResource Include="NimbusPhotos.bundle\gfx\next%402x.png" />
+    <BundleResource Include="NimbusPhotos.bundle\gfx\previous.png" />
+    <BundleResource Include="NimbusPhotos.bundle\gfx\previous%402x.png" />
   </ItemGroup>
 </Project>

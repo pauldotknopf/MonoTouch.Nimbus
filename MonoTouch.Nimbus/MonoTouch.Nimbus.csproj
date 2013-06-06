@@ -56,4 +56,11 @@
       <DependentUpon>libNimbus.a</DependentUpon>
     </Compile>
   </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="NimbusPhotos.bundle\gfx\default.png" />
+    <BundleResource Include="NimbusPhotos.bundle\gfx\next.png" />
+    <BundleResource Include="NimbusPhotos.bundle\gfx\next%402x.png" />
+    <BundleResource Include="NimbusPhotos.bundle\gfx\previous.png" />
+    <BundleResource Include="NimbusPhotos.bundle\gfx\previous%402x.png" />
+  </ItemGroup>
 </Project>
