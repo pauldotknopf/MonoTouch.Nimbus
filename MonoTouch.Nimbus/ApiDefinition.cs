@@ -382,8 +382,8 @@ namespace MonoTouch.Nimbus
 		[Export ("interpolationQuality")]
 		CGInterpolationQuality InterpolationQuality { get; set; }
 		
-//		[Export ("imageMemoryCache")]
-//		NIImageMemoryCache ImageMemoryCache { get; set; }
+		[Export ("imageMemoryCache")]
+		NIImageMemoryCache ImageMemoryCache { get; set; }
 		
 		[Export ("networkOperationQueue")]
 		NSOperationQueue NetworkOperationQueue { get; set; }
