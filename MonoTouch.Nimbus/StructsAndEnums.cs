@@ -18,5 +18,11 @@ namespace MonoTouch.Nimbus
 		NIPhotoScrollViewPhotoSizeThumbnail = 1,
 		NIPhotoScrollViewPhotoSizeOriginal = 2
 	}
+
+	public enum AFHTTPClientParameterEncoding {
+		AFFormURLParameterEncoding = 0,
+		AFJSONParameterEncoding = 1,
+		AFPropertyListParameterEncoding = 2
+	}
 }
 
