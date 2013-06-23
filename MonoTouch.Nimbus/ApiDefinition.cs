@@ -296,10 +296,10 @@ namespace MonoTouch.Nimbus
 	[BaseType(typeof(NSObject))]
 	public partial interface NIPagingScrollViewDataSource {
 
-		[Export ("numberOfPagesInPagingScrollView:")]
+		[Export ("numberOfPagesInPagingScrollView:"), Abstract]
 		int NumberOfPagesInPagingScrollView (NIPagingScrollView pagingScrollView);
 
-		[Export ("pagingScrollView:pageViewForIndex:")]
+		[Export ("pagingScrollView:pageViewForIndex:"), Abstract]
 		NSObject PagingScrollView (NIPagingScrollView pagingScrollView, int pageIndex);
 	}
 
@@ -450,46 +450,55 @@ namespace MonoTouch.Nimbus
 
 	#region Photos
 
+	///@interface NIPhotoAlbumScrollView : NIPagingScrollView <NIPhotoScrollViewDelegate> 
 	[BaseType(typeof(NIPagingScrollView))]
 	public partial interface NIPhotoAlbumScrollView : NIPhotoScrollViewDelegate {
 
+		// - (UIView<NIPagingScrollViewPage> *)pagingScrollView:(NIPagingScrollView *)pagingScrollView pageViewForIndex:(NSInteger)pageIndex;
 		[Export ("pagingScrollView:pageViewForIndex:")]
 		UIView PagingScrollView (NSObject pagingScrollView, int pageIndex);
 
+		// @property (nonatomic, readwrite, NI_WEAK) id<NIPhotoAlbumScrollViewDataSource> dataSource;
 		[Export ("dataSource"), NullAllowed]
 		NSObject WeakDataSource { get; set; }
 
 		[Wrap ("WeakDataSource")]
 		NIPhotoAlbumScrollViewDataSource DataSource { get; set; }
 
+		// @property (nonatomic, readwrite, NI_WEAK) id<NIPhotoAlbumScrollViewDelegate> delegate;
 		[Export ("delegate"), NullAllowed]
 		NSObject WeakDelegate { get; set; }
 
 		[Wrap("WeakDelegate")]
 		NIPhotoAlbumScrollViewDelegate Delegate { get; set; }
 
+		// @property (nonatomic, readwrite, assign, getter=isZoomingEnabled) BOOL zoomingIsEnabled;
 		[Export ("zoomingIsEnabled")]
 		bool ZoomingIsEnabled { [Bind ("isZoomingEnabled")] get; set; }
 
+		// @property (nonatomic, readwrite, assign, getter=isZoomingAboveOriginalSizeEnabled) BOOL zoomingAboveOriginalSizeIsEnabled;
 		[Export ("zoomingAboveOriginalSizeIsEnabled")]
 		bool ZoomingAboveOriginalSizeIsEnabled { [Bind ("isZoomingAboveOriginalSizeEnabled")] get; set; }
 
+		// @property (nonatomic, readwrite, NI_STRONG) UIColor* photoViewBackgroundColor;
 		[Export ("photoViewBackgroundColor")]
 		UIColor PhotoViewBackgroundColor { get; set; }
 
+		// @property (nonatomic, readwrite, NI_STRONG) UIImage* loadingImage;
 		[Export ("loadingImage")]
 		UIImage LoadingImage { get; set; }
 
+		// - (void)didLoadPhoto: (UIImage *)image atIndex: (NSInteger)photoIndex photoSize: (NIPhotoScrollViewPhotoSize)photoSize;
 		[Export ("didLoadPhoto:atIndex:photoSize:")]
 		void DidLoadPhoto (UIImage image, int photoIndex, NIPhotoScrollViewPhotoSize photoSize);
 	}
 
 	[Model]
 	[BaseType(typeof(NSObject))]
-	public partial interface NIPhotoAlbumScrollViewDataSource {
+	public partial interface NIPhotoAlbumScrollViewDataSource : NIPagingScrollViewDataSource {
 
-		[Export ("photoAlbumScrollView:photoAtIndex:photoSize:isLoading:originalPhotoDimensions:")]
-		NSObject PhotoAlbumScrollView (NIPhotoAlbumScrollView photoAlbumScrollView, int photoIndex, NIPhotoScrollViewPhotoSize photoSize, out bool isLoading, NSObject originalPhotoDimensions);
+		[Export ("photoAlbumScrollView:photoAtIndex:photoSize:isLoading:originalPhotoDimensions:"), Abstract]
+		NSObject PhotoAlbumScrollView (NIPhotoAlbumScrollView photoAlbumScrollView, int photoIndex, out NIPhotoScrollViewPhotoSize photoSize, out bool isLoading, out SizeF originalPhotoDimensions);
 
 		[Export ("photoAlbumScrollView:stopLoadingPhotoAtIndex:")]
 		void PhotoAlbumScrollView (NIPhotoAlbumScrollView photoAlbumScrollView, int photoIndex);
@@ -592,10 +601,10 @@ namespace MonoTouch.Nimbus
 	[BaseType(typeof(NSObject))]
 	public partial interface NIPhotoScrubberViewDataSource {
 
-		[Export ("numberOfPhotosInScrubberView:")]
+		[Export ("numberOfPhotosInScrubberView:"), Abstract]
 		int NumberOfPhotosInScrubberView (NIPhotoScrubberView photoScrubberView);
 
-		[Export ("photoScrubberView:thumbnailAtIndex:")]
+		[Export ("photoScrubberView:thumbnailAtIndex:"), Abstract]
 		UIImage PhotoScrubberView (NIPhotoScrubberView photoScrubberView, int thumbnailIndex);
 	}
 
@@ -821,7 +830,7 @@ namespace MonoTouch.Nimbus
 		AFImageRequestOperation ImageRequestOperationWithRequest (NSUrlRequest urlRequest, ImageRequestOperationWithRequestSuccess1 success);
 
 		[Static, Export ("imageRequestOperationWithRequest:imageProcessingBlock:success:failure:")]
-		AFImageRequestOperation ImageRequestOperationWithRequest (NSUrlRequest urlRequest, ImageRequestOperationWithRequestProcessingBlock imageProcessingBlock, ImageRequestOperationWithRequestSuccess2 success, ImageRequestOperationWithRequestFailure failure);
+		AFImageRequestOperation ImageRequestOperationWithRequest (NSUrlRequest urlRequest, [NullAllowed]ImageRequestOperationWithRequestProcessingBlock imageProcessingBlock, ImageRequestOperationWithRequestSuccess2 success, ImageRequestOperationWithRequestFailure failure);
 	}
 
 	public delegate void ImageRequestOperationWithRequestSuccess1(UIImage image);

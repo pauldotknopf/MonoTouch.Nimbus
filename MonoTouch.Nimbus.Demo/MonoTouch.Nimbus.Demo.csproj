@@ -91,31 +91,29 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Info.plist" />
-    <None Include="Photos\NetworkPhotoAlbumViewController.cs" />
-    <None Include="Photos\PhotosCatalogController.cs" />
-    <None Include="Photos\PhotosDribblePhotoAlbumViewController.cs" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Main.cs" />
     <Compile Include="AppDelegate.cs" />
     <Compile Include="ViewRecycling\ViewRecyclingController.cs" />
     <Compile Include="PagingScrollView\BasicInstantiationPagingScrollViewController.cs" />
+    <Compile Include="Photos\PhotosCatalogController.cs" />
+    <Compile Include="Photos\PhotosDribblePhotoAlbumViewController.cs" />
+    <Compile Include="Photos\NetworkPhotoAlbumViewController.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
     <Content Include="Images\Icon.png" />
+    <Content Include="NimbusPhotos.bundle\gfx\default.png" />
+    <Content Include="NimbusPhotos.bundle\gfx\next.png" />
+    <Content Include="NimbusPhotos.bundle\gfx\next%402x.png" />
+    <Content Include="NimbusPhotos.bundle\gfx\previous.png" />
+    <Content Include="NimbusPhotos.bundle\gfx\previous%402x.png" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MonoTouch.Nimbus\MonoTouch.Nimbus.csproj">
       <Project>{302F7DA8-8B42-47B0-96AB-DC40CB5BD6BD}</Project>
       <Name>MonoTouch.Nimbus</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <BundleResource Include="NimbusPhotos.bundle\gfx\default.png" />
-    <BundleResource Include="NimbusPhotos.bundle\gfx\next.png" />
-    <BundleResource Include="NimbusPhotos.bundle\gfx\next%402x.png" />
-    <BundleResource Include="NimbusPhotos.bundle\gfx\previous.png" />
-    <BundleResource Include="NimbusPhotos.bundle\gfx\previous%402x.png" />
   </ItemGroup>
 </Project>

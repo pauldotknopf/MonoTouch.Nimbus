@@ -15,7 +15,9 @@ namespace MonoTouch.Nimbus.Demo
 			base.ViewDidLoad ();
 
 			Root.Add (new Section("Dribbble"){
-				new StyledStringElement("Popular Shots", () => {  })
+				new StyledStringElement("Popular Shots", () => { 
+					this.NavigationController.PushViewController(new PhotosDribblePhotoAlbumViewController("shots"), true);
+				})
 			});
 		}
 	}

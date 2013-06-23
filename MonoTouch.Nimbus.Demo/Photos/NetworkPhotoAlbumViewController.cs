@@ -1,5 +1,6 @@
 using System;
 using MonoTouch.Foundation;
+using MonoTouch.UIKit;
 
 namespace MonoTouch.Nimbus.Demo
 {
@@ -12,7 +13,9 @@ namespace MonoTouch.Nimbus.Demo
 
 		~NetworkPhotoAlbumViewController()
 		{
-			ShutdownNetworkPhotoAlbumViewController ();
+			NSThread.MainThread.InvokeOnMainThread (() => {
+				Queue.CancelAllOperations ();
+			});
 		}
 
 		public NIImageMemoryCache HighQualityImageCache{ get; private set; }
@@ -23,9 +26,18 @@ namespace MonoTouch.Nimbus.Demo
 
 		public NSMutableSet ActiveRequests{ get; private set; }
 
-		public override void ViewDidLoad ()
+		public override void DidReceiveMemoryWarning ()
 		{
-			base.ViewDidLoad ();
+			base.DidReceiveMemoryWarning ();
+			if(!IsViewLoaded)
+			{
+
+			}
+		}
+
+		public override void LoadView ()
+		{
+			base.LoadView ();
 
 			ActiveRequests = new NSMutableSet ();
 			HighQualityImageCache = new NIImageMemoryCache ();
@@ -36,36 +48,43 @@ namespace MonoTouch.Nimbus.Demo
 
 			Queue = new NSOperationQueue ();
 			Queue.MaxConcurrentOperationCount = 5;
+
+			PhotoAlbumView.LoadingImage = UIImage.FromFile ("NimbusPhotos.bundle/gfx/default.png");
 		}
 
-		protected void ShutdownNetworkPhotoAlbumViewController() {
+		protected void ShutdownNetworkPhotoAlbumViewController ()
+		{
+			try{
 			Queue.CancelAllOperations ();
+			}catch(Exception ex) {
+				Console.WriteLine (ex.Message);
+			}
 		}
 
-		protected string CacheKeyForPhotoIndex(int index)
+		protected string CacheKeyForPhotoIndex (int index)
 		{
 			return index.ToString ();
 		}
 
-		protected int IdentifierWithPhotoSize(NIPhotoScrollViewPhotoSize photoSize, int photoIndex)
+		protected int IdentifierWithPhotoSize (NIPhotoScrollViewPhotoSize photoSize, int photoIndex)
 		{
 			var isThumbnail = photoSize == NIPhotoScrollViewPhotoSize.NIPhotoScrollViewPhotoSizeThumbnail;
 			return isThumbnail ? -(photoIndex + 1) : photoIndex;
 		}
 
-		protected NSNumber IdentifierKeyFromIdentifier(int identifier)
+		protected NSNumber IdentifierKeyFromIdentifier (int identifier)
 		{
 			return new NSNumber (identifier);
 		}
 
-		protected void RequestImageFromSource(string source, NIPhotoScrollViewPhotoSize photoSize, int photoIndex)
+		protected void RequestImageFromSource (string source, NIPhotoScrollViewPhotoSize photoSize, int photoIndex)
 		{
 			var isThumbnail = photoSize == NIPhotoScrollViewPhotoSize.NIPhotoScrollViewPhotoSizeThumbnail;
 			var identifier = IdentifierWithPhotoSize (photoSize, photoIndex);
 			var identifierKey = IdentifierKeyFromIdentifier (identifier);
 
 			// avoid duplicate requests
-			if(ActiveRequests.Contains(identifierKey))
+			if (ActiveRequests.Contains (identifierKey))
 				return;
 
 			NSUrl url = null;
@@ -80,75 +99,48 @@ namespace MonoTouch.Nimbus.Demo
 
 			var photoIndexKey = CacheKeyForPhotoIndex (photoIndex);
 
-			NSPropertyListReadOptions = 
-		}
 
-//		///////////////////////////////////////////////////////////////////////////////////////////////////
-//		- (void)requestImageFromSource:(NSString *)source
-//			photoSize:(NIPhotoScrollViewPhotoSize)photoSize
-//				photoIndex:(NSInteger)photoIndex {
-//			BOOL isThumbnail = (NIPhotoScrollViewPhotoSizeThumbnail == photoSize);
-//			NSInteger identifier = [self identifierWithPhotoSize:photoSize photoIndex:photoIndex];
-//			id identifierKey = [self identifierKeyFromIdentifier:identifier];
-//
-//			// Avoid duplicating requests.
-//			if ([_activeRequests containsObject:identifierKey]) {
-//				return;
-//			}
-//
-//			NSURL* url = [NSURL URLWithString:source];
-//			NSMutableURLRequest* request = [NSMutableURLRequest requestWithURL:url];
-//			request.timeoutInterval = 30;
-//
-//			NSString* photoIndexKey = [self cacheKeyForPhotoIndex:photoIndex];
-//
-//			AFImageRequestOperation* readOp =
-//				[AFImageRequestOperation imageRequestOperationWithRequest:request
-//				 imageProcessingBlock:nil success:
-//				 ^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
-//					// Store the image in the correct image cache.
-//					if (isThumbnail) {
-//						[_thumbnailImageCache storeObject: image
-//						 withName: photoIndexKey];
-//
-//					} else {
-//						[_highQualityImageCache storeObject: image
-//						 withName: photoIndexKey];
-//					}
-//
-//					// If you decide to move this code around then ensure that this method is called from
-//					// the main thread. Calling it from any other thread will have undefined results.
-//					[self.photoAlbumView didLoadPhoto: image
-//					 atIndex: photoIndex
-//					 photoSize: photoSize];
-//
-//					if (isThumbnail) {
-//						[self.photoScrubberView didLoadThumbnail:image atIndex:photoIndex];
-//					}
-//
-//					[_activeRequests removeObject:identifierKey];
-//
-//				 } failure:
-//				 ^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error) {
-//
-//				 }];
-//
-//			readOp.imageScale = 1;
-//
-//			// Set the operation priority level.
-//
-//			if (NIPhotoScrollViewPhotoSizeThumbnail == photoSize) {
-//				// Thumbnail images should be lower priority than full-size images.
-//				[readOp setQueuePriority:NSOperationQueuePriorityLow];
-//
-//			} else {
-//				[readOp setQueuePriority:NSOperationQueuePriorityNormal];
-//			}
-//
-//			// Start the operation.
-//			[_activeRequests addObject:identifierKey];
-//			[_queue addOperation:readOp];
-//		}
+
+			var readOp = AFImageRequestOperation.ImageRequestOperationWithRequest (request, null, 
+       			(NSUrlRequest req, NSHttpUrlResponse resp, UIImage img) => 
+               	{
+					// Store the image in the correct image cache.
+					if (isThumbnail) {
+						ThumbnailImageCache.StoreObject(img, photoIndexKey);
+
+					} else {
+						HighQualityImageCache.StoreObject(img, photoIndexKey);
+					}
+					// If you decide to move this code around then ensure that this method is called from
+					// the main thread. Calling it from any other thread will have undefined results.
+					PhotoAlbumView.DidLoadPhoto(img, photoIndex, photoSize);
+					
+					if(isThumbnail) {
+						if(PhotoScrubberView != null)
+							PhotoScrubberView.DidLoadThumbnail(img, photoIndex);
+					}
+
+					this.ActiveRequests.Remove(identifierKey);
+
+				}, (NSUrlRequest req, NSHttpUrlResponse resp, NSError er) => {
+
+				});
+
+			readOp.ImageScale = 1;
+
+			// Set the operation priority level.
+			if(photoSize == NIPhotoScrollViewPhotoSize.NIPhotoScrollViewPhotoSizeThumbnail)
+			{
+				readOp.QueuePriority = NSOperationQueuePriority.Low;
+			}else
+			{
+				readOp.QueuePriority = NSOperationQueuePriority.Normal;
+			}
+					
+			// Start the operation.
+			ActiveRequests.Add(identifierKey);
+			Queue.AddOperation(readOp);
+		}
 	}
 }
 

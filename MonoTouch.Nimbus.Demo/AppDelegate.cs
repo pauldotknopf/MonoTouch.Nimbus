@@ -34,7 +34,7 @@ namespace MonoTouch.Nimbus.Demo
 			// If you have defined a root view controller, set it here:
 			// window.RootViewController = myViewController;
 
-			window.RootViewController = new BasicInstantiationPagingScrollViewController ();
+			window.RootViewController = new UINavigationController(new PhotosCatalogController ());
 			window.MakeKeyAndVisible ();
 
 			return true;
