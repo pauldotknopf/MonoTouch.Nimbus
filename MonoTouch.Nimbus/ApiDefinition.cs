@@ -454,207 +454,268 @@ namespace MonoTouch.Nimbus
 	[BaseType(typeof(NIPagingScrollView))]
 	public partial interface NIPhotoAlbumScrollView : NIPhotoScrollViewDelegate {
 
-		// - (UIView<NIPagingScrollViewPage> *)pagingScrollView:(NIPagingScrollView *)pagingScrollView pageViewForIndex:(NSInteger)pageIndex;
+		//- (UIView<NIPagingScrollViewPage> *)pagingScrollView:(NIPagingScrollView *)pagingScrollView pageViewForIndex:(NSInteger)pageIndex;
 		[Export ("pagingScrollView:pageViewForIndex:")]
 		UIView PagingScrollView (NSObject pagingScrollView, int pageIndex);
 
-		// @property (nonatomic, readwrite, NI_WEAK) id<NIPhotoAlbumScrollViewDataSource> dataSource;
+		//@property (nonatomic, readwrite, NI_WEAK) id<NIPhotoAlbumScrollViewDataSource> dataSource;
 		[Export ("dataSource"), NullAllowed]
 		NSObject WeakDataSource { get; set; }
 
 		[Wrap ("WeakDataSource")]
 		NIPhotoAlbumScrollViewDataSource DataSource { get; set; }
 
-		// @property (nonatomic, readwrite, NI_WEAK) id<NIPhotoAlbumScrollViewDelegate> delegate;
+		//@property (nonatomic, readwrite, NI_WEAK) id<NIPhotoAlbumScrollViewDelegate> delegate;
 		[Export ("delegate"), NullAllowed]
 		NSObject WeakDelegate { get; set; }
 
 		[Wrap("WeakDelegate")]
 		NIPhotoAlbumScrollViewDelegate Delegate { get; set; }
 
-		// @property (nonatomic, readwrite, assign, getter=isZoomingEnabled) BOOL zoomingIsEnabled;
+		//@property (nonatomic, readwrite, assign, getter=isZoomingEnabled) BOOL zoomingIsEnabled;
 		[Export ("zoomingIsEnabled")]
 		bool ZoomingIsEnabled { [Bind ("isZoomingEnabled")] get; set; }
 
-		// @property (nonatomic, readwrite, assign, getter=isZoomingAboveOriginalSizeEnabled) BOOL zoomingAboveOriginalSizeIsEnabled;
+		//@property (nonatomic, readwrite, assign, getter=isZoomingAboveOriginalSizeEnabled) BOOL zoomingAboveOriginalSizeIsEnabled;
 		[Export ("zoomingAboveOriginalSizeIsEnabled")]
 		bool ZoomingAboveOriginalSizeIsEnabled { [Bind ("isZoomingAboveOriginalSizeEnabled")] get; set; }
 
-		// @property (nonatomic, readwrite, NI_STRONG) UIColor* photoViewBackgroundColor;
+		//@property (nonatomic, readwrite, NI_STRONG) UIColor* photoViewBackgroundColor;
 		[Export ("photoViewBackgroundColor")]
 		UIColor PhotoViewBackgroundColor { get; set; }
 
-		// @property (nonatomic, readwrite, NI_STRONG) UIImage* loadingImage;
+		//@property (nonatomic, readwrite, NI_STRONG) UIImage* loadingImage;
 		[Export ("loadingImage")]
 		UIImage LoadingImage { get; set; }
 
-		// - (void)didLoadPhoto: (UIImage *)image atIndex: (NSInteger)photoIndex photoSize: (NIPhotoScrollViewPhotoSize)photoSize;
+		//- (void)didLoadPhoto: (UIImage *)image atIndex: (NSInteger)photoIndex photoSize: (NIPhotoScrollViewPhotoSize)photoSize;
 		[Export ("didLoadPhoto:atIndex:photoSize:")]
 		void DidLoadPhoto (UIImage image, int photoIndex, NIPhotoScrollViewPhotoSize photoSize);
 	}
 
+	//@protocol NIPhotoAlbumScrollViewDataSource <NIPagingScrollViewDataSource>
 	[Model]
 	[BaseType(typeof(NSObject))]
 	public partial interface NIPhotoAlbumScrollViewDataSource : NIPagingScrollViewDataSource {
 
+		//- (UIImage *)photoAlbumScrollView: (NIPhotoAlbumScrollView *)photoAlbumScrollView
+		//	photoAtIndex: (NSInteger)photoIndex
+		//		photoSize: (NIPhotoScrollViewPhotoSize *)photoSize
+		//		isLoading: (BOOL *)isLoading
+		//		originalPhotoDimensions: (CGSize *)originalPhotoDimensions;
 		[Export ("photoAlbumScrollView:photoAtIndex:photoSize:isLoading:originalPhotoDimensions:"), Abstract]
 		NSObject PhotoAlbumScrollView (NIPhotoAlbumScrollView photoAlbumScrollView, int photoIndex, out NIPhotoScrollViewPhotoSize photoSize, out bool isLoading, out SizeF originalPhotoDimensions);
 
+		//- (void)photoAlbumScrollView: (NIPhotoAlbumScrollView *)photoAlbumScrollView
+		//	stopLoadingPhotoAtIndex: (NSInteger)photoIndex;
 		[Export ("photoAlbumScrollView:stopLoadingPhotoAtIndex:")]
 		void PhotoAlbumScrollView (NIPhotoAlbumScrollView photoAlbumScrollView, int photoIndex);
 	}
 
+	//@protocol NIPhotoAlbumScrollViewDelegate <NIPagingScrollViewDelegate>
 	[Model]
 	[BaseType(typeof(NSObject))]
 	public partial interface NIPhotoAlbumScrollViewDelegate {
 
+		//- (void)photoAlbumScrollView: (NIPhotoAlbumScrollView *)photoAlbumScrollView
+		//	didZoomIn: (BOOL)didZoomIn;
 		[Export ("photoAlbumScrollView:didZoomIn:")]
 		void PhotoAlbumScrollView (NIPhotoAlbumScrollView photoAlbumScrollView, bool didZoomIn);
 
+		//- (void)photoAlbumScrollViewDidLoadNextPhoto:(NIPhotoAlbumScrollView *)photoAlbumScrollView;
 		[Export ("photoAlbumScrollViewDidLoadNextPhoto:")]
 		void PhotoAlbumScrollViewDidLoadNextPhoto (NIPhotoAlbumScrollView photoAlbumScrollView);
 
+		//- (void)photoAlbumScrollViewDidLoadPreviousPhoto:(NIPhotoAlbumScrollView *)photoAlbumScrollView;
 		[Export ("photoAlbumScrollViewDidLoadPreviousPhoto:")]
 		void PhotoAlbumScrollViewDidLoadPreviousPhoto (NIPhotoAlbumScrollView photoAlbumScrollView);
 	}
 
+	//@interface NIPhotoScrollView : UIView <
+	//	UIScrollViewDelegate,
+	//	NIPagingScrollViewPage> 
 	[BaseType (typeof (UIView))]
 	public partial interface NIPhotoScrollView { //: UIScrollViewDelegate {
 
+		//@property (nonatomic, readwrite, assign, getter=isZoomingEnabled) BOOL zoomingIsEnabled; // default: yes
 		[Export ("zoomingIsEnabled")]
 		bool ZoomingIsEnabled { [Bind ("isZoomingEnabled")] get; set; }
 
+		//@property (nonatomic, readwrite, assign, getter=isZoomingAboveOriginalSizeEnabled) BOOL zoomingAboveOriginalSizeIsEnabled; // default: yes
 		[Export ("zoomingAboveOriginalSizeIsEnabled")]
 		bool ZoomingAboveOriginalSizeIsEnabled { [Bind ("isZoomingAboveOriginalSizeEnabled")] get; set; }
 
+		//@property (nonatomic, readwrite, assign, getter=isDoubleTapToZoomEnabled) BOOL doubleTapToZoomIsEnabled; // default: yes
 		[Export ("doubleTapToZoomIsEnabled")]
 		bool DoubleTapToZoomIsEnabled { [Bind ("isDoubleTapToZoomEnabled")] get; set; }
 
+		//@property (nonatomic, readwrite, assign) CGFloat maximumScale; // default: 0 (autocalculate)
 		[Export ("maximumScale")]
 		float MaximumScale { get; set; }
 
+		//@property (nonatomic, readwrite, NI_WEAK) id<NIPhotoScrollViewDelegate> photoScrollViewDelegate;
 		[Export ("photoScrollViewDelegate"), NullAllowed]
 		NSObject WeakPhotoScrollViewDelegate { get; set; }
 
 		[Wrap ("WeakPhotoScrollViewDelegate")]
 		NIPhotoScrollViewDelegate PhotoScrollViewDelegate { get; set; }
 
+		//- (UIImage *)image;
 		[Export ("image")]
 		UIImage Image { get; }
 
+		//- (NIPhotoScrollViewPhotoSize)photoSize;
 		[Export ("photoSize")]
 		NIPhotoScrollViewPhotoSize PhotoSize { get; }
 
+		//- (void)setImage:(UIImage *)image photoSize:(NIPhotoScrollViewPhotoSize)photoSize;
 		[Export ("setImage:photoSize:")]
 		void SetImage (UIImage image, NIPhotoScrollViewPhotoSize photoSize);
 
+		//@property (nonatomic, assign, getter = isLoading) BOOL loading;
 		[Export ("loading")]
 		bool Loading { [Bind ("isLoading")] get; set; }
 
+		//@property (nonatomic, readwrite, assign) NSInteger pageIndex;
 		[Export ("pageIndex")]
 		int PageIndex { get; set; }
 
+		//@property (nonatomic, readwrite, assign) CGSize photoDimensions;
 		[Export ("photoDimensions")]
 		SizeF PhotoDimensions { get; set; }
 
+		//@property (nonatomic, readonly, NI_STRONG) UITapGestureRecognizer* doubleTapGestureRecognizer;
 		[Export ("doubleTapGestureRecognizer")]
 		UITapGestureRecognizer DoubleTapGestureRecognizer { get; }
 	}
 
+	//@protocol NIPhotoScrollViewDelegate <NSObject>
 	[Model]
 	[BaseType(typeof(NSObject))]
 	public partial interface NIPhotoScrollViewDelegate {
 
+		//- (void)photoScrollViewDidDoubleTapToZoom: (NIPhotoScrollView *)photoScrollView
+		//	didZoomIn: (BOOL)didZoomIn;
 		[Export ("photoScrollViewDidDoubleTapToZoom:didZoomIn:")]
 		void PhotoScrollViewDidDoubleTapToZoom (NIPhotoScrollView photoScrollView, bool didZoomIn);
 	}
 
+	//@interface NIPhotoScrubberView : UIView
 	[BaseType (typeof (UIView))]
 	public partial interface NIPhotoScrubberView {
 
+		//@property (nonatomic, readwrite, NI_WEAK) id<NIPhotoScrubberViewDataSource> dataSource;
 		[Export ("dataSource"), NullAllowed]
 		NSObject WeakDataSource { get; set; }
 
 		[Wrap ("WeakDataSource")]
 		NIPhotoScrubberViewDataSource DataSource { get; set; }
 
+		//@property (nonatomic, readwrite, assign) id<NIPhotoScrubberViewDelegate> delegate;
 		[Export ("delegate"), NullAllowed]
 		NSObject WeakDelegate { get; set; }
 
 		[Wrap("WeakDelegate")]
 		NIPhotoScrubberViewDelegate Delegate { get; set; }
 
+		//- (void)reloadData;
 		[Export ("reloadData")]
 		void ReloadData ();
 
+		//- (void)didLoadThumbnail: (UIImage *)image
+		//	atIndex: (NSInteger)photoIndex;
 		[Export ("didLoadThumbnail:atIndex:")]
 		void DidLoadThumbnail (UIImage image, int photoIndex);
 
+		//@property (nonatomic, readwrite, assign) NSInteger selectedPhotoIndex;
 		[Export ("selectedPhotoIndex")]
 		int SelectedPhotoIndex { get; set; }
 
+		//- (void)setSelectedPhotoIndex:(NSInteger)photoIndex animated:(BOOL)animated;
 		[Export ("setSelectedPhotoIndex:animated:")]
 		void SetSelectedPhotoIndex (int photoIndex, bool animated);
 	}
 
+	//@protocol NIPhotoScrubberViewDataSource <NSObject>
 	[Model]
 	[BaseType(typeof(NSObject))]
 	public partial interface NIPhotoScrubberViewDataSource {
 
+		//- (NSInteger)numberOfPhotosInScrubberView:(NIPhotoScrubberView *)photoScrubberView;
 		[Export ("numberOfPhotosInScrubberView:"), Abstract]
 		int NumberOfPhotosInScrubberView (NIPhotoScrubberView photoScrubberView);
 
+		//- (UIImage *)photoScrubberView: (NIPhotoScrubberView *)photoScrubberView
+		//	thumbnailAtIndex: (NSInteger)thumbnailIndex;
 		[Export ("photoScrubberView:thumbnailAtIndex:"), Abstract]
 		UIImage PhotoScrubberView (NIPhotoScrubberView photoScrubberView, int thumbnailIndex);
 	}
 
+	//@protocol NIPhotoScrubberViewDelegate <NSObject>
 	[Model]
 	[BaseType(typeof(NSObject))]
 	public partial interface NIPhotoScrubberViewDelegate {
 
+		//- (void)photoScrubberViewDidChangeSelection:(NIPhotoScrubberView *)photoScrubberView;
 		[Export ("photoScrubberViewDidChangeSelection:")]
 		void PhotoScrubberViewDidChangeSelection (NIPhotoScrubberView photoScrubberView);
 	}
 
+	//@interface NIToolbarPhotoViewController : UIViewController <
+	//	NIPhotoAlbumScrollViewDelegate,
+	//	NIPhotoScrubberViewDelegate > 
 	[BaseType (typeof (UIViewController))]
 	public partial interface NIToolbarPhotoViewController : NIPhotoAlbumScrollViewDelegate, NIPhotoScrubberViewDelegate {
 
+		//@property (nonatomic, readwrite, assign, getter=isToolbarTranslucent) BOOL toolbarIsTranslucent; // default: yes
 		[Export ("toolbarIsTranslucent")]
 		bool ToolbarIsTranslucent { [Bind ("isToolbarTranslucent")] get; set; }
 
+		//@property (nonatomic, readwrite, assign) BOOL hidesChromeWhenScrolling; // default: yes
 		[Export ("hidesChromeWhenScrolling")]
 		bool HidesChromeWhenScrolling { get; set; }
 
+		//@property (nonatomic, readwrite, assign) BOOL chromeCanBeHidden; // default: yes
 		[Export ("chromeCanBeHidden")]
 		bool ChromeCanBeHidden { get; set; }
 
+		//@property (nonatomic, readwrite, assign) BOOL animateMovingToNextAndPreviousPhotos; // default: no
 		[Export ("animateMovingToNextAndPreviousPhotos")]
 		bool AnimateMovingToNextAndPreviousPhotos { get; set; }
 
+		//@property (nonatomic, readwrite, assign, getter=isScrubberEnabled) BOOL scrubberIsEnabled; // default: ipad yes - iphone no
 		[Export ("scrubberIsEnabled")]
 		bool ScrubberIsEnabled { [Bind ("isScrubberEnabled")] get; set; }
 
+		//@property (nonatomic, readonly, NI_STRONG) UIToolbar* toolbar;
 		[Export ("toolbar")]
 		UIToolbar Toolbar { get; }
 
+		//@property (nonatomic, readonly, NI_STRONG) NIPhotoAlbumScrollView* photoAlbumView;
 		[Export ("photoAlbumView")]
 		NIPhotoAlbumScrollView PhotoAlbumView { get; }
 
+		//@property (nonatomic, readonly, NI_STRONG) NIPhotoScrubberView* photoScrubberView;
 		[Export ("photoScrubberView")]
 		NIPhotoScrubberView PhotoScrubberView { get; }
 
+		//- (void)refreshChromeState;
 		[Export ("refreshChromeState")]
 		void RefreshChromeState ();
 
+		//@property (nonatomic, readonly, NI_STRONG) UIBarButtonItem* nextButton;
 		[Export ("nextButton")]
 		UIBarButtonItem NextButton { get; }
 
+		//@property (nonatomic, readonly, NI_STRONG) UIBarButtonItem* previousButton;
 		[Export ("previousButton")]
 		UIBarButtonItem PreviousButton { get; }
 
+		//- (void)setChromeVisibility:(BOOL)isVisible animated:(BOOL)animated;
 		[Export ("setChromeVisibility:animated:")]
 		void SetChromeVisibility (bool isVisible, bool animated);
 
+		//- (void)setChromeTitle;
 		[Export ("setChromeTitle")]
 		void SetChromeTitle ();
 	}
