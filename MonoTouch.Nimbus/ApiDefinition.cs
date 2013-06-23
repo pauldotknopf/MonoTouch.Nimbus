@@ -515,7 +515,7 @@ namespace MonoTouch.Nimbus
 	//@protocol NIPhotoAlbumScrollViewDelegate <NIPagingScrollViewDelegate>
 	[Model]
 	[BaseType(typeof(NSObject))]
-	public partial interface NIPhotoAlbumScrollViewDelegate {
+	public partial interface NIPhotoAlbumScrollViewDelegate : NIPagingScrollViewDelegate {
 
 		//- (void)photoAlbumScrollView: (NIPhotoAlbumScrollView *)photoAlbumScrollView
 		//	didZoomIn: (BOOL)didZoomIn;
@@ -931,10 +931,6 @@ namespace MonoTouch.Nimbus
 		[Export ("decrementActivityCount")]
 		void DecrementActivityCount ();
 	}
-
-//	+ (AFPropertyListRequestOperation *)propertyListRequestOperationWithRequest:(NSURLRequest *)urlRequest
-//		success:(void (^)(NSURLRequest *request, NSHTTPURLResponse *response, id propertyList))success
-//			failure:(void (^)(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error, id propertyList))failure;
 
 	public delegate void AFPropertyListRequestOperationSuccess(NSUrlRequest request, NSHttpUrlResponse response, NSObject propertyList);
 	public delegate void AFPropertyListRequestOperationFailure(NSUrlRequest request, NSHttpUrlResponse response, NSError error, NSObject propertyList);

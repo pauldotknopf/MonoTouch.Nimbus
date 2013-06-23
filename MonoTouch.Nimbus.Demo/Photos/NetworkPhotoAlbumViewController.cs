@@ -141,6 +141,21 @@ namespace MonoTouch.Nimbus.Demo
 			ActiveRequests.Add(identifierKey);
 			Queue.AddOperation(readOp);
 		}
+
+		public override void PhotoAlbumScrollViewDidLoadNextPhoto (NIPhotoAlbumScrollView photoAlbumScrollView)
+		{
+			// overridden so that the native call won't be made because it isn't implemented in NIToolbarPhotoViewController
+		}
+
+		public override void PhotoAlbumScrollViewDidLoadPreviousPhoto (NIPhotoAlbumScrollView photoAlbumScrollView)
+		{
+			// overridden so that the native call won't be made because it isn't implemented in NIToolbarPhotoViewController
+		}
+
+		public override void PagingScrollViewWillChangePages (NIPagingScrollView pagingScrollView)
+		{
+			// overridden so that the native call won't be made because it isn't implemented in NIToolbarPhotoViewController
+		}
 	}
 }
 

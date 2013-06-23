@@ -3,6 +3,7 @@ using MonoTouch.Foundation;
 using System.Drawing;
 using System.Collections.Generic;
 using MonoTouch.UIKit;
+using MonoTouch.ObjCRuntime;
 
 namespace MonoTouch.Nimbus.Demo
 {
@@ -29,10 +30,11 @@ namespace MonoTouch.Nimbus.Demo
 			_albumDataSource = new DribblePhotoAlbumDataSource (this);
 			_scrubberDataSource = new DribblePhotoScrubberDataSource (this);
 			PhotoAlbumView.DataSource = _albumDataSource;
-			PhotoAlbumView.Delegate = new CustomPhotoAlbumScrollViewDelegate ();
-			if (PhotoScrubberView != null)
+			PhotoAlbumView.WeakDelegate = this;
+			if (PhotoScrubberView != null) {
 				PhotoScrubberView.DataSource = _scrubberDataSource;
-
+				PhotoScrubberView.WeakDelegate = this;
+			}
 			// Dribbble is for mockups and designs, so we don't want to allow the photos to be zoomed
 			PhotoAlbumView.ZoomingAboveOriginalSizeIsEnabled = false;
 
@@ -41,6 +43,9 @@ namespace MonoTouch.Nimbus.Demo
 
 			LoadAlbumInformation ();
 		}
+
+
+
 
 		private void LoadAlbumInformation ()
 		{
@@ -110,6 +115,11 @@ namespace MonoTouch.Nimbus.Demo
 			RefreshChromeState ();
 		}
 
+		public override void PhotoAlbumScrollView (NIPhotoAlbumScrollView photoAlbumScrollView, bool didZoomIn)
+		{
+			base.PhotoAlbumScrollView (photoAlbumScrollView, didZoomIn);
+		}
+
 		private void LoadThumbnails ()
 		{
 			foreach (var photo in _photos) {
@@ -176,14 +186,8 @@ namespace MonoTouch.Nimbus.Demo
 
 			public override NSObject PagingScrollView (NIPagingScrollView pagingScrollView, int pageIndex)
 			{
-				var result = (NIPhotoScrollView)_controller.PhotoAlbumView.PagingScrollView (pagingScrollView, pageIndex);
-				result.PhotoScrollViewDelegate = new CustomScrollViewDelegate ();
-				return result;
+				return _controller.PhotoAlbumView.PagingScrollView (pagingScrollView, pageIndex);
 			}
-		}
-
-		public class CustomScrollViewDelegate : NIPhotoScrollViewDelegate
-		{
 		}
 
 		public class DribblePhotoScrubberDataSource : NIPhotoScrubberViewDataSource
