@@ -142,6 +142,8 @@ namespace MonoTouch.Nimbus.Demo
 			Queue.AddOperation(readOp);
 		}
 
+		#region Delegates
+
 		public override void PhotoAlbumScrollViewDidLoadNextPhoto (NIPhotoAlbumScrollView photoAlbumScrollView)
 		{
 			// overridden so that the native call won't be made because it isn't implemented in NIToolbarPhotoViewController
@@ -156,6 +158,8 @@ namespace MonoTouch.Nimbus.Demo
 		{
 			// overridden so that the native call won't be made because it isn't implemented in NIToolbarPhotoViewController
 		}
+
+		#endregion
 	}
 }
 

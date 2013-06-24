@@ -97,9 +97,9 @@
     <Compile Include="AppDelegate.cs" />
     <Compile Include="ViewRecycling\ViewRecyclingController.cs" />
     <Compile Include="PagingScrollView\BasicInstantiationPagingScrollViewController.cs" />
-    <Compile Include="Photos\PhotosCatalogController.cs" />
-    <Compile Include="Photos\PhotosDribblePhotoAlbumViewController.cs" />
     <Compile Include="Photos\NetworkPhotoAlbumViewController.cs" />
+    <Compile Include="Photos\DribblePhotoAlbumViewController.cs" />
+    <Compile Include="Photos\CatalogController.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

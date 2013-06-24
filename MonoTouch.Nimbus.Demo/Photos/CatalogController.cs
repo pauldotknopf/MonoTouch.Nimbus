@@ -1,11 +1,11 @@
 using System;
 using MonoTouch.Dialog;
 
-namespace MonoTouch.Nimbus.Demo
+namespace MonoTouch.Nimbus.Demo.Photos
 {
-	public class PhotosCatalogController : MonoTouch.Dialog.DialogViewController
+	public class CatalogController : MonoTouch.Dialog.DialogViewController
 	{
-		public PhotosCatalogController ()
+		public CatalogController ()
 			:base(new RootElement("Photo Album Catalog"))
 		{
 		}
@@ -16,7 +16,7 @@ namespace MonoTouch.Nimbus.Demo
 
 			Root.Add (new Section("Dribbble"){
 				new StyledStringElement("Popular Shots", () => { 
-					this.NavigationController.PushViewController(new PhotosDribblePhotoAlbumViewController("shots"), true);
+					this.NavigationController.PushViewController(new DribblePhotoAlbumViewController("shots"), true);
 				})
 			});
 		}

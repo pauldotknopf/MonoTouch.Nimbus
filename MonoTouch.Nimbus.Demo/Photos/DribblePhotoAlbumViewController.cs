@@ -5,36 +5,44 @@ using System.Collections.Generic;
 using MonoTouch.UIKit;
 using MonoTouch.ObjCRuntime;
 
-namespace MonoTouch.Nimbus.Demo
+namespace MonoTouch.Nimbus.Demo.Photos
 {
-	public class PhotosDribblePhotoAlbumViewController : NetworkPhotoAlbumViewController
+	/// <summary>
+	/// View controller that shows photots from dribble.
+	/// </summary>
+	public class DribblePhotoAlbumViewController : NetworkPhotoAlbumViewController
 	{
+		#region Fields
+
 		DribblePhotoAlbumDataSource _albumDataSource;
 		DribblePhotoScrubberDataSource _scrubberDataSource;
 		List<PhotoInfo> _photos;
 		string _apiPath;
 
-		public PhotosDribblePhotoAlbumViewController (string apiPath)
+		#endregion
+
+		#region Ctor
+
+		public DribblePhotoAlbumViewController (string apiPath)
 		{
 			_apiPath = apiPath;
 		}
 
-		public class CustomPhotoAlbumScrollViewDelegate : NIPhotoAlbumScrollViewDelegate
-		{
-		}
+		#endregion
+
+		#region Methods
 
 		public override void LoadView ()
 		{
 			base.LoadView ();
 
+			// build and set the datasources
 			_albumDataSource = new DribblePhotoAlbumDataSource (this);
 			_scrubberDataSource = new DribblePhotoScrubberDataSource (this);
 			PhotoAlbumView.DataSource = _albumDataSource;
-			PhotoAlbumView.WeakDelegate = this;
-			if (PhotoScrubberView != null) {
+			if (ScrubberIsEnabled)
 				PhotoScrubberView.DataSource = _scrubberDataSource;
-				PhotoScrubberView.WeakDelegate = this;
-			}
+
 			// Dribbble is for mockups and designs, so we don't want to allow the photos to be zoomed
 			PhotoAlbumView.ZoomingAboveOriginalSizeIsEnabled = false;
 
@@ -43,9 +51,6 @@ namespace MonoTouch.Nimbus.Demo
 
 			LoadAlbumInformation ();
 		}
-
-
-
 
 		private void LoadAlbumInformation ()
 		{
@@ -103,7 +108,8 @@ namespace MonoTouch.Nimbus.Demo
 
 			_photos = photos;
 
-			LoadThumbnails ();
+			if(ScrubberIsEnabled)
+				LoadThumbnails ();
 
 			_albumDataSource.Photos = _photos;
 			_scrubberDataSource.Photos = _photos;
@@ -113,11 +119,6 @@ namespace MonoTouch.Nimbus.Demo
 				PhotoScrubberView.ReloadData ();
 
 			RefreshChromeState ();
-		}
-
-		public override void PhotoAlbumScrollView (NIPhotoAlbumScrollView photoAlbumScrollView, bool didZoomIn)
-		{
-			base.PhotoAlbumScrollView (photoAlbumScrollView, didZoomIn);
 		}
 
 		private void LoadThumbnails ()
@@ -135,11 +136,15 @@ namespace MonoTouch.Nimbus.Demo
 			}
 		}
 
+		#endregion
+
+		#region Nested Classes
+
 		public class DribblePhotoAlbumDataSource : NIPhotoAlbumScrollViewDataSource
 		{
-			PhotosDribblePhotoAlbumViewController _controller;
+			DribblePhotoAlbumViewController _controller;
 
-			public DribblePhotoAlbumDataSource (PhotosDribblePhotoAlbumViewController controller)
+			public DribblePhotoAlbumDataSource (DribblePhotoAlbumViewController controller)
 			{
 				_controller = controller;	
 			}
@@ -192,9 +197,9 @@ namespace MonoTouch.Nimbus.Demo
 
 		public class DribblePhotoScrubberDataSource : NIPhotoScrubberViewDataSource
 		{
-			PhotosDribblePhotoAlbumViewController _controller;
+			DribblePhotoAlbumViewController _controller;
 
-			public DribblePhotoScrubberDataSource (PhotosDribblePhotoAlbumViewController controller)
+			public DribblePhotoScrubberDataSource (DribblePhotoAlbumViewController controller)
 			{
 				_controller = controller;	
 			}
@@ -228,6 +233,8 @@ namespace MonoTouch.Nimbus.Demo
 
 			public SizeF Dimensions { get; set; }
 		}
+
+		#endregion
 	}
 }
 
