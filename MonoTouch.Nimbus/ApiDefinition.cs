@@ -74,51 +74,42 @@ namespace MonoTouch.Nimbus
 
 	#region View Recycling
 
- 	// An object for efficiently reusing views by recycling and dequeuing them from a pool of views.
- 	// This sort of object is what UITableView and NIPagingScrollView use to recycle their views.
-	// @interface NIViewRecycler : NSObject
+ 	//@interface NIViewRecycler : NSObject
 	[BaseType (typeof (NSObject))]
 	public partial interface NIViewRecycler {
-		// - (UIView<NIRecyclableView> *)dequeueReusableViewWithIdentifier:(NSString *)reuseIdentifier;
+
+		//- (UIView<NIRecyclableView> *)dequeueReusableViewWithIdentifier:(NSString *)reuseIdentifier;
 		[Export ("dequeueReusableViewWithIdentifier:")]
 		UIView DequeueReusableViewWithIdentifier (string reuseIdentifier);
 
-		// - (void)recycleView:(UIView<NIRecyclableView> *)view;
+		//- (void)recycleView:(UIView<NIRecyclableView> *)view;
 		[Export ("recycleView:")]
 		void RecycleView (UIView view);
 
-		// - (void)removeAllViews;
+		//- (void)removeAllViews;
 		[Export ("removeAllViews")]
 		void RemoveAllViews ();
 	}
 
-	// The protocol for a recyclable view.
-	// @protocol NIRecyclableView <NSObject>
+	//@protocol NIRecyclableView <NSObject>
 	[BaseType(typeof(NSObject), Name="NIRecyclableView")]
 	[Model]
 	public partial interface NIRecyclableViewProtocol {
 
- 		// The identifier used to categorize views into buckets for reuse.
- 		// Views will be reused when a new view is requested with a matching identifier.
- 		// If the reuseIdentifier is nil then the class name will be used.
-		// @property (nonatomic, readwrite, copy) NSString* reuseIdentifier;
+ 		//@property (nonatomic, readwrite, copy) NSString* reuseIdentifier;
 		[Export ("reuseIdentifier")]
 		string ReuseIdentifier { get; set; }
 
- 		// Called immediately after the view has been dequeued from the recycled view pool.
-		// - (void)prepareForReuse;
+ 		//- (void)prepareForReuse;
 		[Export ("prepareForReuse")]
 		void PrepareForReuse ();
 	}
 
- 	// A simple view implementation of the NIRecyclableView protocol.
- 	// This view class can easily be used with a NIViewRecycler.
-	// @interface NIRecyclableView : UIView <NIRecyclableView>
+ 	//@interface NIRecyclableView : UIView <NIRecyclableView>
 	[BaseType (typeof (UIView))]
 	public partial interface NIRecyclableView : NIRecyclableViewProtocol {
 
-		// Designated initializer.
-		// - (id)initWithReuseIdentifier:(NSString *)reuseIdentifier;
+		//- (id)initWithReuseIdentifier:(NSString *)reuseIdentifier;
 		[Export ("initWithReuseIdentifier:")]
 		IntPtr Constructor (string reuseIdentifier);
 	}
@@ -127,67 +118,88 @@ namespace MonoTouch.Nimbus
 
 	#region InMemoryCache
 
+	//@interface NIMemoryCache : NSObject
 	[BaseType (typeof (NSObject))]
 	public partial interface NIMemoryCache {
 
+		//- (id)initWithCapacity:(NSUInteger)capacity;
 		[Export ("initWithCapacity:")]
 		IntPtr Constructor (uint capacity);
 
+		//- (NSUInteger)count;
 		[Export ("count")]
 		uint Count { get; }
 
+		//- (void)storeObject:(id)object withName:(NSString *)name;
 		[Export ("storeObject:withName:")]
 		void StoreObject (NSObject item, string name);
 
+		//- (void)storeObject:(id)object withName:(NSString *)name expiresAfter:(NSDate *)expirationDate;
 		[Export ("storeObject:withName:expiresAfter:")]
 		void StoreObject (NSObject item, string name, NSDate expirationDate);
 
+		//- (void)removeObjectWithName:(NSString *)name;
 		[Export ("removeObjectWithName:")]
 		void RemoveObjectWithName (string name);
 
+		//- (void)removeAllObjectsWithPrefix:(NSString *)prefix;
 		[Export ("removeAllObjectsWithPrefix:")]
 		void RemoveAllObjectsWithPrefix (string prefix);
 
+		//- (void)removeAllObjects;
 		[Export ("removeAllObjects")]
 		void RemoveAllObjects ();
 
+		//- (id)objectWithName:(NSString *)name;
 		[Export ("objectWithName:")]
 		NSObject ObjectWithName (string name);
 
+		//- (BOOL)containsObjectWithName:(NSString *)name;
 		[Export ("containsObjectWithName:")]
 		bool ContainsObjectWithName (string name);
 
+		//- (NSDate *)dateOfLastAccessWithName:(NSString *)name;
 		[Export ("dateOfLastAccessWithName:")]
 		NSDate DateOfLastAccessWithName (string name);
 
+		//- (NSString *)nameOfLeastRecentlyUsedObject;
 		[Export ("nameOfLeastRecentlyUsedObject")]
 		string NameOfLeastRecentlyUsedObject { get; }
 
+		//- (NSString *)nameOfMostRecentlyUsedObject;
 		[Export ("nameOfMostRecentlyUsedObject")]
 		string NameOfMostRecentlyUsedObject { get; }
 
+		//- (void)reduceMemoryUsage;
 		[Export ("reduceMemoryUsage")]
 		void ReduceMemoryUsage ();
 
+		//- (BOOL)willSetObject:(id)object withName:(NSString *)name previousObject:(id)previousObject;
 		[Export ("willSetObject:withName:previousObject:")]
 		bool WillSetObject (NSObject item, string name, NSObject previousObject);
 
+		//- (void)didSetObject:(id)object withName:(NSString *)name;
 		[Export ("didSetObject:withName:")]
 		void DidSetObject (NSObject item, string name);
 
+		//- (void)willRemoveObject:(id)object withName:(NSString *)name;
 		[Export ("willRemoveObject:withName:")]
 		void WillRemoveObject (NSObject item, string name);
 	}
 
+	//@interface NIImageMemoryCache : NIMemoryCache
 	[BaseType (typeof (NIMemoryCache))]
 	public partial interface NIImageMemoryCache {
 
+		//@property (nonatomic, readonly, assign) NSUInteger numberOfPixels;
 		[Export ("numberOfPixels")]
 		uint NumberOfPixels { get; }
 
+		//@property (nonatomic, readwrite, assign) NSUInteger maxNumberOfPixels;
 		[Export ("maxNumberOfPixels")]
 		uint MaxNumberOfPixels { get; set; }
 
+		//@property (nonatomic, readwrite, assign) NSUInteger maxNumberOfPixelsUnderStress;
 		[Export ("maxNumberOfPixelsUnderStress")]
 		uint MaxNumberOfPixelsUnderStress { get; set; }
 	}
@@ -198,133 +210,164 @@ namespace MonoTouch.Nimbus
 
 	#region PagingScrollView
 
+	//@interface NIPageView : NIRecyclableView <NIPagingScrollViewPage>
 	[BaseType (typeof (NIRecyclableView))]
 	public partial interface NIPageView : NIPagingScrollViewPage 
 	{
-		// TODO: Bug somewhere in btouch. This fields were causing a build error. http://stackoverflow.com/questions/16952194/monotouch-binding-project-build-errors
-		//[Field ("NIPagingScrollViewUnknownNumberOfPages")]
-		//int NIPagingScrollViewUnknownNumberOfPages { get; }
-
-		//[Field ("NIPagingScrollViewDefaultPageMargin")]
-		//float NIPagingScrollViewDefaultPageMargin { get; }
 	}
 
+	//@interface NIPagingScrollView : UIView <UIScrollViewDelegate>
 	[BaseType (typeof (UIView))]
 	public partial interface NIPagingScrollView {
 
+		//- (void)reloadData;
 		[Export ("reloadData")]
 		void ReloadData ();
 
+		//@property (nonatomic, NI_WEAK) id<NIPagingScrollViewDataSource> dataSource;
 		[Export ("dataSource"), NullAllowed]
 		NSObject WeakDataSource { get; set; }
 
 		[Wrap ("WeakDataSource")]
 		NIPagingScrollViewDataSource DataSource { get; set; }
 
+		//@property (nonatomic, NI_WEAK) id<NIPagingScrollViewDelegate> delegate;
 		[Export ("delegate"), NullAllowed]
 		NSObject WeakDelegate { get; set; }
 
 		[Wrap("WeakDelegate")]
 		UIScrollViewDelegate Delegate { get; set; }
 
+		//- (UIView<NIPagingScrollViewPage> *)dequeueReusablePageWithIdentifier:(NSString *)identifier;
 		[Export ("dequeueReusablePageWithIdentifier:")]
 		UIView DequeueReusablePageWithIdentifier (string identifier);
 
+		//- (UIView<NIPagingScrollViewPage> *)centerPageView;
 		[Export ("centerPageView")]
 		UIView CenterPageView { get; }
 
+		//@property (nonatomic, assign) NSInteger centerPageIndex;
 		[Export ("centerPageIndex")]
 		int CenterPageIndex { get; set; }
 
+		//@property (nonatomic, readonly, assign) NSInteger numberOfPages;
 		[Export ("numberOfPages")]
 		int NumberOfPages { get; }
 
+		//@property (nonatomic, assign) CGFloat pageMargin;
 		[Export ("pageMargin")]
 		float PageMargin { get; set; }
 
+		//@property (nonatomic, assign) NIPagingScrollViewType type;
 		[Export ("type")]
 		NIPagingScrollViewType Type { get; set; }
 
+		//- (BOOL)hasNext;
 		[Export ("hasNext")]
 		bool HasNext { get; }
 
+		//- (BOOL)hasPrevious;
 		[Export ("hasPrevious")]
 		bool HasPrevious { get; }
 
+		//- (void)moveToNextAnimated:(BOOL)animated;
 		[Export ("moveToNextAnimated:")]
 		void MoveToNextAnimated (bool animated);
 
+		//- (void)moveToPreviousAnimated:(BOOL)animated;
 		[Export ("moveToPreviousAnimated:")]
 		void MoveToPreviousAnimated (bool animated);
 
+		//- (BOOL)moveToPageAtIndex:(NSInteger)pageIndex animated:(BOOL)animated;
 		[Export ("moveToPageAtIndex:animated:")]
 		bool MoveToPageAtIndex (int pageIndex, bool animated);
 
+		//- (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration;
 		[Export ("willRotateToInterfaceOrientation:duration:")]
 		void WillRotateToInterfaceOrientation (UIInterfaceOrientation toInterfaceOrientation, double duration);
 
+		//- (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration;
 		[Export ("willAnimateRotationToInterfaceOrientation:duration:")]
 		void WillAnimateRotationToInterfaceOrientation (UIInterfaceOrientation toInterfaceOrientation, double duration);
 
+		//@property (nonatomic, readonly, NI_STRONG) UIScrollView* pagingScrollView;
 		[Export ("pagingScrollView")]
 		UIScrollView PagingScrollView { get; }
 
+		//@property (nonatomic, readonly, copy) NSMutableSet* visiblePages;
 		[Export ("visiblePages")]
 		NSMutableSet VisiblePages { get; }
 	}
 
+	//@interface NIPagingScrollView (Subclassing)
 	[Category, BaseType (typeof (NIPagingScrollView))]
 	public partial interface NIPagingScrollViewSubclassing {
 
+		//- (void)willDisplayPage:(UIView<NIPagingScrollViewPage> *)pageView;
 		[Export ("willDisplayPage:")]
 		void WillDisplayPage (UIView pageView);
 
+		//- (void)didRecyclePage:(UIView<NIPagingScrollViewPage> *)pageView;
 		[Export ("didRecyclePage:")]
 		void DidRecyclePage (UIView pageView);
 
+		//- (void)didReloadNumberOfPages;
 		[Export ("didReloadNumberOfPages")]
 		void DidReloadNumberOfPages ();
 
+		//- (void)didChangeCenterPageIndexFrom:(NSInteger)from to:(NSInteger)to;
 		[Export ("didChangeCenterPageIndexFrom:to:")]
 		void DidChangeCenterPageIndexFrom (int from, int to);
 
+		//- (UIView<NIPagingScrollViewPage> *)loadPageAtIndex:(NSInteger)pageIndex;
 		[Export ("loadPageAtIndex:")]
 		UIView LoadPageAtIndex (int pageIndex);
 	}
 
+	//@protocol NIPagingScrollViewDataSource <NSObject>
 	[Model]
 	[BaseType(typeof(NSObject))]
 	public partial interface NIPagingScrollViewDataSource {
 
+		//- (NSInteger)numberOfPagesInPagingScrollView:(NIPagingScrollView *)pagingScrollView;
 		[Export ("numberOfPagesInPagingScrollView:"), Abstract]
 		int NumberOfPagesInPagingScrollView (NIPagingScrollView pagingScrollView);
 
+		//- (UIView<NIPagingScrollViewPage> *)pagingScrollView:(NIPagingScrollView *)pagingScrollView pageViewForIndex:(NSInteger)pageIndex;
 		[Export ("pagingScrollView:pageViewForIndex:"), Abstract]
 		NSObject PagingScrollView (NIPagingScrollView pagingScrollView, int pageIndex);
 	}
 
+	//@protocol NIPagingScrollViewDelegate <UIScrollViewDelegate>
 	[Model]
 	public partial interface NIPagingScrollViewDelegate {
 
+		//- (void)pagingScrollViewDidScroll:(NIPagingScrollView *)pagingScrollView;
 		[Export ("pagingScrollViewDidScroll:")]
 		void PagingScrollViewDidScroll (NIPagingScrollView pagingScrollView);
 
+		//- (void)pagingScrollViewWillChangePages:(NIPagingScrollView *)pagingScrollView;
 		[Export ("pagingScrollViewWillChangePages:")]
 		void PagingScrollViewWillChangePages (NIPagingScrollView pagingScrollView);
 
+		//- (void)pagingScrollViewDidChangePages:(NIPagingScrollView *)pagingScrollView;
 		[Export ("pagingScrollViewDidChangePages:")]
 		void PagingScrollViewDidChangePages (NIPagingScrollView pagingScrollView);
 	}
 
+	//@protocol NIPagingScrollViewPage <NIRecyclableView>
 	[Model]
-	public partial interface NIPagingScrollViewPage {
+	public partial interface NIPagingScrollViewPage : NIRecyclableView {
 
-		[Export ("pageIndex")]
+		//@property (nonatomic, readwrite, assign) NSInteger pageIndex;
+		[Export ("pageIndex"), Abstract]
 		int PageIndex { get; set; }
 
+		//- (void)pageDidDisappear;
 		[Export ("pageDidDisappear")]
 		void PageDidDisappear ();
 
+		//- (void)setFrameAndMaintainState:(CGRect)frame;
 		[Export ("frameAndMaintainState")]
 		NSObject FrameAndMaintainState { set; }
 	}
@@ -333,115 +376,150 @@ namespace MonoTouch.Nimbus
 
 	#region NetworkImage
 
+	//@protocol NINetworkImageOperation <NSObject>
 	[Model]
 	[BaseType(typeof(NSObject))]
 	public partial interface NINetworkImageOperation {
-		
-		[Export ("cacheIdentifier")]
+
+		//@property (readonly, copy) NSString* cacheIdentifier;
+		[Export ("cacheIdentifier"), Abstract]
 		string CacheIdentifier { get; }
-		
-		[Export ("imageCropRect")]
+
+		//@property (readwrite, assign) CGRect imageCropRect;
+		[Export ("imageCropRect"), Abstract]
 		RectangleF ImageCropRect { get; set; }
-		
-		[Export ("imageDisplaySize")]
+
+		//@property (readwrite, assign) CGSize imageDisplaySize;
+		[Export ("imageDisplaySize"), Abstract]
 		SizeF ImageDisplaySize { get; set; }
-		
-		[Export ("scaleOptions")]
+
+		//@property (readwrite, assign) NINetworkImageViewScaleOptions scaleOptions;
+		[Export ("scaleOptions"), Abstract]
 		NINetworkImageViewScaleOptions ScaleOptions { get; set; }
-		
-		[Export ("interpolationQuality")]
+
+		//@property (readwrite, assign) CGInterpolationQuality interpolationQuality;
+		[Export ("interpolationQuality"), Abstract]
 		CGInterpolationQuality InterpolationQuality { get; set; }
-		
-		[Export ("imageContentMode")]
+
+		//@property (readwrite, assign) UIViewContentMode imageContentMode;
+		[Export ("imageContentMode"), Abstract]
 		UIViewContentMode ImageContentMode { get; set; }
-		
-		[Export ("imageCroppedAndSizedForDisplay")]
+
+		//@property (readwrite, NI_STRONG) UIImage* imageCroppedAndSizedForDisplay;
+		[Export ("imageCroppedAndSizedForDisplay"), Abstract]
 		UIImage ImageCroppedAndSizedForDisplay { get; set; }
 	}
 
+	//@interface NINetworkImageView : UIImageView <NIOperationDelegate>
 	[BaseType (typeof (UIImageView))]
 	public partial interface NINetworkImageView : NIOperationDelegate {
 
+		//@property (nonatomic, readwrite, NI_WEAK) id<NINetworkImageViewDelegate> delegate;
 		[Export ("delegate"), NullAllowed]
 		NSObject WeakDelegate { get; set; }
 		
 		[Wrap("WeakDelegate")]
 		NINetworkImageViewDelegate Delegate { get; set; }
 
+		//- (id)initWithImage:(UIImage *)image;
 		[Export ("initWithImage:")]
 		IntPtr Constructor (UIImage image);
-		
+
+		//@property (nonatomic, readwrite, NI_STRONG) UIImage* initialImage; 
 		[Export ("initialImage")]
 		UIImage InitialImage { get; set; }
-		
+
+		//@property (nonatomic, readwrite, assign) BOOL sizeForDisplay; 
 		[Export ("sizeForDisplay")]
 		bool SizeForDisplay { get; set; }
-		
+
+		//@property (nonatomic, readwrite, assign) NINetworkImageViewScaleOptions scaleOptions;
 		[Export ("scaleOptions")]
 		NINetworkImageViewScaleOptions ScaleOptions { get; set; }
-		
+
+		//@property (nonatomic, readwrite, assign) CGInterpolationQuality interpolationQuality;
 		[Export ("interpolationQuality")]
 		CGInterpolationQuality InterpolationQuality { get; set; }
-		
+
+		//@property (nonatomic, readwrite, NI_STRONG) NIImageMemoryCache* imageMemoryCache; 
 		[Export ("imageMemoryCache")]
 		NIImageMemoryCache ImageMemoryCache { get; set; }
-		
+
+		//@property (nonatomic, readwrite, NI_STRONG) NSOperationQueue* networkOperationQueue;
 		[Export ("networkOperationQueue")]
 		NSOperationQueue NetworkOperationQueue { get; set; }
-		
+
+		//@property (nonatomic, readwrite, assign) NSTimeInterval maxAge;
 		[Export ("maxAge")]
 		double MaxAge { get; set; }
-		
-		[Export ("pathToNetworkImage")]
-		string PathToNetworkImage { set; }
-		
+
+		//- (void)setPathToNetworkImage:(NSString *)pathToNetworkImage;
+		[Export ("setPathToNetworkImage:")]
+		void SetPathToNetworkImage (string pathToNetworkImage);
+
+		//- (void)setPathToNetworkImage:(NSString *)pathToNetworkImage forDisplaySize:(CGSize)displaySize;
 		[Export ("setPathToNetworkImage:forDisplaySize:")]
 		void SetPathToNetworkImage (string pathToNetworkImage, SizeF displaySize);
 
+		//- (void)setPathToNetworkImage:(NSString *)pathToNetworkImage forDisplaySize:(CGSize)displaySize contentMode:(UIViewContentMode)contentMode;
 		[Export ("setPathToNetworkImage:forDisplaySize:contentMode:")]
 		void SetPathToNetworkImage (string pathToNetworkImage, SizeF displaySize, UIViewContentMode contentMode);
-		
+
+		//- (void)setPathToNetworkImage:(NSString *)pathToNetworkImage forDisplaySize:(CGSize)displaySize contentMode:(UIViewContentMode)contentMode cropRect:(CGRect)cropRect;
 		[Export ("setPathToNetworkImage:forDisplaySize:contentMode:cropRect:")]
 		void SetPathToNetworkImage (string pathToNetworkImage, SizeF displaySize, UIViewContentMode contentMode, RectangleF cropRect);
-		
+
+		//- (void)setPathToNetworkImage:(NSString *)pathToNetworkImage cropRect:(CGRect)cropRect;
 		[Export ("setPathToNetworkImage:cropRect:")]
 		void SetPathToNetworkImage (string pathToNetworkImage, RectangleF cropRect);
-		
+
+		//- (void)setPathToNetworkImage:(NSString *)pathToNetworkImage contentMode:(UIViewContentMode)contentMode;
 		[Export ("setPathToNetworkImage:contentMode:")]
 		void SetPathToNetworkImage (string pathToNetworkImage, UIViewContentMode contentMode);
-		
+
+		//- (void)setNetworkImageOperation:(NIOperation<NINetworkImageOperation> *)operation forDisplaySize:(CGSize)displaySize contentMode:(UIViewContentMode)contentMode cropRect:(CGRect)cropRect;
 		[Export ("setNetworkImageOperation:forDisplaySize:contentMode:cropRect:")]
 		void SetNetworkImageOperation (NINetworkImageOperation operation, SizeF displaySize, UIViewContentMode contentMode, RectangleF cropRect);
-		
+
+		//@property (nonatomic, readonly, assign, getter=isLoading) BOOL loading;
 		[Export ("loading")]
 		bool Loading { [Bind ("isLoading")] get; }
-		
+
+		//- (void)prepareForReuse;
 		[Export ("prepareForReuse")]
 		void PrepareForReuse ();
-		
+
+		//- (void)networkImageViewDidStartLoading;
 		[Export ("networkImageViewDidStartLoading")]
 		void NetworkImageViewDidStartLoading ();
-		
+
+		//- (void)networkImageViewDidLoadImage:(UIImage *)image;
 		[Export ("networkImageViewDidLoadImage:")]
 		void NetworkImageViewDidLoadImage (UIImage image);
-		
+
+		//- (void)networkImageViewDidFailWithError:(NSError *)error;
 		[Export ("networkImageViewDidFailWithError:")]
 		void NetworkImageViewDidFailWithError (NSError error);
 	}
 
+	//@protocol NINetworkImageViewDelegate <NSObject>
 	[Model]
 	[BaseType(typeof(NSObject))]
 	public partial interface NINetworkImageViewDelegate  {
-		
+
+		//- (void)networkImageViewDidStartLoad:(NINetworkImageView *)imageView;
 		[Export ("networkImageViewDidStartLoad:")]
 		void NetworkImageViewDidStartLoad (NINetworkImageView imageView);
-		
+
+		//- (void)networkImageView:(NINetworkImageView *)imageView didLoadImage:(UIImage *)image;
 		[Export ("networkImageView:didLoadImage:")]
 		void NetworkImageViewDidLoadImage (NINetworkImageView imageView, UIImage image);
-		
+
+		//- (void)networkImageView:(NINetworkImageView *)imageView didFailWithError:(NSError *)error;
 		[Export ("networkImageView:didFailWithError:")]
 		void NetworkImageViewDidFailWithError (NINetworkImageView imageView, NSError error);
-		
+
+		//- (void)networkImageView:(NINetworkImageView *)imageView readBytes:(long long)readBytes totalBytes:(long long)totalBytes;
 		[Export ("networkImageView:readBytes:totalBytes:")]
 		void NetworkImageViewReadBytes (NINetworkImageView imageView, long readBytes, long totalBytes);
 	}
