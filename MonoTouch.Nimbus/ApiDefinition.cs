@@ -724,272 +724,404 @@ namespace MonoTouch.Nimbus
 
 	#region AFNetworking
 
+	#region Delegates
+
+	//(void (^)(AFHTTPRequestOperation *operation, id responseObject))
 	public delegate void AFHTTPClientRequestSuccess(AFHTTPRequestOperation operation, NSObject responseObject);
-
+	//(void (^)(AFHTTPRequestOperation *operation, NSError *error))
 	public delegate void AFHTTPClientRequestFailure(AFHTTPRequestOperation operation, NSError error);
-	
+	//(void (^)(id <AFMultipartFormData> formData))
 	public delegate void AFHTTPClientMultipartFormRequestWithMethodBlock(AFMultipartFormData formData);
-
+	//(void (^)(NSUInteger numberOfFinishedOperations, NSUInteger totalNumberOfOperations))
 	public delegate void AFHTTPClientProgress(UINavigationItem numberOfFinishedOperations, uint totalNumberOfOperations);
-
+	//(void (^)(NSArray *operations))
 	public delegate void AFHTTPClientCompletion(NSArray operations);
+	//(void (^)(UIImage *image))
+	public delegate void ImageRequestOperationWithRequestSuccess1(UIImage image);
+	//(void (^)(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image))
+	public delegate void ImageRequestOperationWithRequestSuccess2(NSUrlRequest request, NSHttpUrlResponse response, UIImage image);
+	//(void (^)(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error))
+	public delegate void ImageRequestOperationWithRequestFailure(NSUrlRequest request, NSHttpUrlResponse response, NSError error);
+	//(UIImage *(^)(UIImage *image))
+	public delegate UIImage ImageRequestOperationWithRequestProcessingBlock(UIImage image);
+	//(void (^)(NSURLRequest *request, NSHTTPURLResponse *response, id JSON))
+	public delegate void AFJSONRequestOperationJsonRequestOperationWithRequestSuccess(NSUrlRequest request, NSHttpUrlResponse response, NSObject json);
+	//(void (^)(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error, id JSON))
+	public delegate void AFJSONRequestOperationJsonRequestOperationWithRequestFailure(NSUrlRequest request, NSHttpUrlResponse response, NSError error, NSObject json);
+	//(void (^)(NSURLRequest *request, NSHTTPURLResponse *response, id propertyList))
+	public delegate void AFPropertyListRequestOperationSuccess(NSUrlRequest request, NSHttpUrlResponse response, NSObject propertyList);
+	//(void (^)(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error, id propertyList))
+	public delegate void AFPropertyListRequestOperationFailure(NSUrlRequest request, NSHttpUrlResponse response, NSError error, NSObject propertyList);
 
+	#endregion
+
+	//@interface AFHTTPClient : NSObject <NSCoding, NSCopying>
 	[BaseType (typeof (NSObject))]
 	public partial interface AFHTTPClient {
 
+		//@property (readonly, nonatomic) NSURL *baseURL;
 		[Export ("baseURL")]
 		NSUrl BaseUrl { get; }
 
+		//@property (nonatomic, assign) NSStringEncoding stringEncoding;
 		[Export ("stringEncoding")]
 		NSStringEncoding StringEncoding { get; set; }
 
+		//@property (nonatomic, assign) AFHTTPClientParameterEncoding parameterEncoding;
 		[Export ("parameterEncoding")]
 		AFHTTPClientParameterEncoding ParameterEncoding { get; set; }
 
+		//@property (readonly, nonatomic) NSOperationQueue *operationQueue;
 		[Export ("operationQueue")]
 		NSOperationQueue OperationQueue { get; }
 
+		//TODO:
+		//@property (readonly, nonatomic, assign) AFNetworkReachabilityStatus networkReachabilityStatus;
+
+		//+ (AFHTTPClient *)clientWithBaseURL:(NSURL *)url;
 		[Static, Export ("clientWithBaseURL:")]
 		AFHTTPClient ClientWithBaseUrl (NSUrl url);
 
+		//- (id)initWithBaseURL:(NSURL *)url;
 		[Export ("initWithBaseURL:")]
 		IntPtr Constructor (NSUrl url);
 
+		//- (BOOL)registerHTTPOperationClass:(Class)operationClass;
 		[Export ("registerHTTPOperationClass:")]
-		bool RegisterHTTPOperationClass (MonoTouch.ObjCRuntime.Class operationClass);
+		bool RegisterHttpOperationClass (MonoTouch.ObjCRuntime.Class operationClass);
 
+		//- (void)unregisterHTTPOperationClass:(Class)operationClass;
 		[Export ("unregisterHTTPOperationClass:")]
-		void UnregisterHTTPOperationClass (MonoTouch.ObjCRuntime.Class operationClass);
+		void UnregisterHttpOperationClass (MonoTouch.ObjCRuntime.Class operationClass);
 
+		//- (NSString *)defaultValueForHeader:(NSString *)header;
 		[Export ("defaultValueForHeader:")]
 		string DefaultValueForHeader (string header);
 
+		//- (void)setDefaultHeader:(NSString *)header value:(NSString *)value;
 		[Export ("setDefaultHeader:value:")]
 		void SetDefaultHeader (string header, string value);
 
+		//- (void)setAuthorizationHeaderWithUsername:(NSString *)username password:(NSString *)password;
 		[Export ("setAuthorizationHeaderWithUsername:password:")]
 		void SetAuthorizationHeaderWithUsername (string username, string password);
 
+		//- (void)setAuthorizationHeaderWithToken:(NSString *)token;
 		[Export ("authorizationHeaderWithToken")]
 		string AuthorizationHeaderWithToken { set; }
 
+		//- (void)clearAuthorizationHeader;
 		[Export ("clearAuthorizationHeader")]
 		void ClearAuthorizationHeader ();
 
+		//- (NSMutableURLRequest *)requestWithMethod:(NSString *)method 
+		//	path:(NSString *)path 
+		//		parameters:(NSDictionary *)parameters;
 		[Export ("requestWithMethod:path:parameters:")]
 		NSMutableUrlRequest RequestWithMethod (string method, string path, NSDictionary parameters);
 
+		//- (NSMutableURLRequest *)multipartFormRequestWithMethod:(NSString *)method
+		//	path:(NSString *)path
+		//		parameters:(NSDictionary *)parameters
+		//		constructingBodyWithBlock:(void (^)(id <AFMultipartFormData> formData))block;
 		[Export ("multipartFormRequestWithMethod:path:parameters:constructingBodyWithBlock:")]
 		NSMutableUrlRequest MultipartFormRequestWithMethod (string method, string path, NSDictionary parameters, AFHTTPClientMultipartFormRequestWithMethodBlock block);
 
+		//- (AFHTTPRequestOperation *)HTTPRequestOperationWithRequest:(NSURLRequest *)urlRequest
+		//	success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success
+		//		failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure;
 		[Export ("HTTPRequestOperationWithRequest:success:failure:")]
-		AFHTTPRequestOperation HTTPRequestOperationWithRequest (NSUrlRequest urlRequest, AFHTTPClientRequestSuccess success, AFHTTPClientRequestFailure failure);
+		AFHTTPRequestOperation HttpRequestOperationWithRequest (NSUrlRequest urlRequest, AFHTTPClientRequestSuccess success, AFHTTPClientRequestFailure failure);
 
+		//- (void)enqueueHTTPRequestOperation:(AFHTTPRequestOperation *)operation;
 		[Export ("enqueueHTTPRequestOperation:")]
 		void EnqueueHTTPRequestOperation (AFHTTPRequestOperation operation);
 
+		//- (void)cancelAllHTTPOperationsWithMethod:(NSString *)method path:(NSString *)path;
 		[Export ("cancelAllHTTPOperationsWithMethod:path:")]
 		void CancelAllHttpoPerationsWithMethod (string method, string path);
 
+		//- (void)enqueueBatchOfHTTPRequestOperationsWithRequests:(NSArray *)urlRequests
+		//	progressBlock:(void (^)(NSUInteger numberOfFinishedOperations, NSUInteger totalNumberOfOperations))progressBlock 
+		//		completionBlock:(void (^)(NSArray *operations))completionBlock;
 		[Export ("enqueueBatchOfHTTPRequestOperationsWithRequests:progressBlock:completionBlock:")]
 		void EnqueueBatchOfHttprEquestOperationsWithRequests (NSObject [] urlRequests, AFHTTPClientProgress progressBlock, AFHTTPClientCompletion completionBlock);
 
+		//- (void)enqueueBatchOfHTTPRequestOperations:(NSArray *)operations 
+		//	progressBlock:(void (^)(NSUInteger numberOfFinishedOperations, NSUInteger totalNumberOfOperations))progressBlock 
+		//		completionBlock:(void (^)(NSArray *operations))completionBlock;
 		[Export ("enqueueBatchOfHTTPRequestOperations:progressBlock:completionBlock:")]
 		void EnqueueBatchOfHttprEquestOperations (NSObject [] operations, AFHTTPClientProgress progressBlock, AFHTTPClientCompletion completionBlock);
 
+		//- (void)getPath:(NSString *)path
+		//	parameters:(NSDictionary *)parameters
+		//		success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success
+		//		failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure;
 		[Export ("getPath:parameters:success:failure:")]
 		void GetPath (string path, NSDictionary parameters, AFHTTPClientRequestSuccess success, AFHTTPClientRequestFailure failure);
 
+		//- (void)postPath:(NSString *)path 
+		//	parameters:(NSDictionary *)parameters 
+		//		success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success
+		//		failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure;
 		[Export ("postPath:parameters:success:failure:")]
 		void PostPath (string path, NSDictionary parameters, AFHTTPClientRequestSuccess success, AFHTTPClientRequestFailure failure);
 
+		//- (void)putPath:(NSString *)path 
+		//	parameters:(NSDictionary *)parameters 
+		//		success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success
+		//		failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure;
 		[Export ("putPath:parameters:success:failure:")]
 		void PutPath (string path, NSDictionary parameters, AFHTTPClientRequestSuccess success, AFHTTPClientRequestFailure failure);
 
+		//- (void)deletePath:(NSString *)path 
+		//	parameters:(NSDictionary *)parameters 
+		//		success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success
+		//		failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure;
 		[Export ("deletePath:parameters:success:failure:")]
 		void DeletePath (string path, NSDictionary parameters, AFHTTPClientRequestSuccess success, AFHTTPClientRequestFailure failure);
 
+		//- (void)patchPath:(NSString *)path
+		//	parameters:(NSDictionary *)parameters 
+		//		success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success
+		//		failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure;
 		[Export ("patchPath:parameters:success:failure:")]
 		void PatchPath (string path, NSDictionary parameters, AFHTTPClientRequestSuccess success, AFHTTPClientRequestFailure failure);
 
 		// TODO:
-//		[Field ("kAFUploadStream3GSuggestedPacketSize")]
-//		uint kAFUploadStream3GSuggestedPacketSize { get; }
-//
-//		[Field ("kAFUploadStream3GSuggestedDelay")]
-//		double kAFUploadStream3GSuggestedDelay { get; }
+		//[Field ("kAFUploadStream3GSuggestedPacketSize")]
+		//uint kAFUploadStream3GSuggestedPacketSize { get; }
+		//
+		//[Field ("kAFUploadStream3GSuggestedDelay")]
+		//double kAFUploadStream3GSuggestedDelay { get; }
 	}
 
+	//@protocol AFMultipartFormData
 	[Model]
 	[BaseType(typeof(NSObject))]
 	public partial interface AFMultipartFormData {
 
+		//- (BOOL)appendPartWithFileURL:(NSURL *)fileURL
+		//	name:(NSString *)name
+		//		error:(NSError * __autoreleasing *)error;
 		[Export ("appendPartWithFileURL:name:error:")]
 		bool AppendPartWithFileUrl (NSUrl fileURL, string name, out NSError error);
 
+		//- (void)appendPartWithFileData:(NSData *)data
+		//	name:(NSString *)name
+		//		fileName:(NSString *)fileName
+		//		mimeType:(NSString *)mimeType;
 		[Export ("appendPartWithFileData:name:fileName:mimeType:")]
 		void AppendPartWithFileData (NSData data, string name, string fileName, string mimeType);
 
+		//- (void)appendPartWithFormData:(NSData *)data
+		//	name:(NSString *)name;
 		[Export ("appendPartWithFormData:name:")]
 		void AppendPartWithFormData (NSData data, string name);
 
+		//- (void)appendPartWithHeaders:(NSDictionary *)headers
+		//	body:(NSData *)body;
 		[Export ("appendPartWithHeaders:body:")]
 		void AppendPartWithHeaders (NSDictionary headers, NSData body);
 
+		//- (void)throttleBandwidthWithPacketSize:(NSUInteger)numberOfBytes
+		//	delay:(NSTimeInterval)delay;
 		[Export ("throttleBandwidthWithPacketSize:delay:")]
 		void ThrottleBandwidthWithPacketSize (uint numberOfBytes, double delay);
 	}
 
+	//@interface AFHTTPRequestOperation : AFURLConnectionOperation
 	[BaseType (typeof (AFURLConnectionOperation))]
 	public partial interface AFHTTPRequestOperation {
 
+		//@property (readonly, nonatomic, strong) NSHTTPURLResponse *response;
 		[Export ("response")]
 		NSHttpUrlResponse Response { get; }
 
+		//@property (readonly) BOOL hasAcceptableStatusCode;
 		[Export ("hasAcceptableStatusCode")]
 		bool HasAcceptableStatusCode { get; }
 
+		//@property (readonly) BOOL hasAcceptableContentType;
 		[Export ("hasAcceptableContentType")]
 		bool HasAcceptableContentType { get; }
 
+		//@property (nonatomic, assign) dispatch_queue_t successCallbackQueue;
 		[Export ("successCallbackQueue")]
 		DispatchQueue SuccessCallbackQueue { get; set; }
 
+		//@property (nonatomic, assign) dispatch_queue_t failureCallbackQueue;
 		[Export ("failureCallbackQueue")]
 		DispatchQueue FailureCallbackQueue { get; set; }
 
+		//+ (NSIndexSet *)acceptableStatusCodes;
 		[Export ("acceptableStatusCodes")]
 		NSIndexSet AcceptableStatusCodes { get; }
 
+		//+ (void)addAcceptableStatusCodes:(NSIndexSet *)statusCodes;
 		[Static, Export ("addAcceptableStatusCodes:")]
 		void AddAcceptableStatusCodes (NSIndexSet statusCodes);
 
+		//+ (NSSet *)acceptableContentTypes;
 		[Export ("acceptableContentTypes")]
 		NSSet AcceptableContentTypes { get; }
 
+		//+ (void)addAcceptableContentTypes:(NSSet *)contentTypes;
 		[Static, Export ("addAcceptableContentTypes:")]
 		void AddAcceptableContentTypes (NSSet contentTypes);
 
+		//+ (BOOL)canProcessRequest:(NSURLRequest *)urlRequest;
 		[Static, Export ("canProcessRequest:")]
 		bool CanProcessRequest (NSUrlRequest urlRequest);
 
 		// TODO:
-//		[Export ("completionBlockWithSuccess:failure")]
-//		Delegate CompletionBlockWithSuccess { set; }
+		//[Export ("completionBlockWithSuccess:failure")]
+		//Delegate CompletionBlockWithSuccess { set; }
 	}
 
+	//@interface AFImageRequestOperation : AFHTTPRequestOperation
 	[BaseType (typeof (AFHTTPRequestOperation))]
 	public partial interface AFImageRequestOperation {
 
+		//@property (readonly, nonatomic, strong) UIImage *responseImage;
 		[Export ("responseImage")]
 		UIImage ResponseImage { get; }
 
+		//@property (nonatomic, assign) CGFloat imageScale;
 		[Export ("imageScale")]
 		float ImageScale { get; set; }
 
+		//+ (AFImageRequestOperation *)imageRequestOperationWithRequest:(NSURLRequest *)urlRequest                
+		//	success:(void (^)(UIImage *image))success;
 		[Static, Export ("imageRequestOperationWithRequest:success:")]
 		AFImageRequestOperation ImageRequestOperationWithRequest (NSUrlRequest urlRequest, ImageRequestOperationWithRequestSuccess1 success);
 
+		//+ (AFImageRequestOperation *)imageRequestOperationWithRequest:(NSURLRequest *)urlRequest
+		//	imageProcessingBlock:(UIImage *(^)(UIImage *image))imageProcessingBlock
+		//		success:(void (^)(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image))success
+		//		failure:(void (^)(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error))failure;
 		[Static, Export ("imageRequestOperationWithRequest:imageProcessingBlock:success:failure:")]
 		AFImageRequestOperation ImageRequestOperationWithRequest (NSUrlRequest urlRequest, [NullAllowed]ImageRequestOperationWithRequestProcessingBlock imageProcessingBlock, ImageRequestOperationWithRequestSuccess2 success, ImageRequestOperationWithRequestFailure failure);
 	}
 
-	public delegate void ImageRequestOperationWithRequestSuccess1(UIImage image);
-	public delegate void ImageRequestOperationWithRequestSuccess2(NSUrlRequest request, NSHttpUrlResponse response, UIImage image);
-	public delegate void ImageRequestOperationWithRequestFailure(NSUrlRequest request, NSHttpUrlResponse response, NSError error);
-	public delegate UIImage ImageRequestOperationWithRequestProcessingBlock(UIImage image);
-	public delegate void AFJSONRequestOperationJsonRequestOperationWithRequestSuccess(NSUrlRequest request, NSHttpUrlResponse response, NSObject json);
-	public delegate void AFJSONRequestOperationJsonRequestOperationWithRequestFailure(NSUrlRequest request, NSHttpUrlResponse response, NSError error, NSObject json);
+	//@interface AFJSONRequestOperation : AFHTTPRequestOperation
 	[BaseType (typeof (AFHTTPRequestOperation))]
 	public partial interface AFJSONRequestOperation {
 
+		//@property (readonly, nonatomic, strong) id responseJSON;
 		[Export ("responseJSON")]
 		NSObject ResponseJson { get; }
 
+		//@property (nonatomic, assign) NSJSONReadingOptions JSONReadingOptions;
 		[Export ("JSONReadingOptions")]
 		NSJsonReadingOptions JsonReadingOptions { get; set; }
 
+		//+ (AFJSONRequestOperation *)JSONRequestOperationWithRequest:(NSURLRequest *)urlRequest
+		//	success:(void (^)(NSURLRequest *request, NSHTTPURLResponse *response, id JSON))success 
+		//		failure:(void (^)(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error, id JSON))failure;
 		[Static, Export ("JSONRequestOperationWithRequest:success:failure:")]
 		AFJSONRequestOperation JsonRequestOperationWithRequest (NSUrlRequest urlRequest, AFJSONRequestOperationJsonRequestOperationWithRequestSuccess success, AFJSONRequestOperationJsonRequestOperationWithRequestFailure failure);
 	}
 
+	//@interface AFNetworkActivityIndicatorManager : NSObject
 	[BaseType (typeof (NSObject))]
 	public partial interface AFNetworkActivityIndicatorManager {
 
+		//@property (nonatomic, assign, getter = isEnabled) BOOL enabled;
 		[Export ("enabled")]
 		bool Enabled { [Bind ("isEnabled")] get; set; }
 
+		//@property (readonly, nonatomic, assign) BOOL isNetworkActivityIndicatorVisible; 
 		[Export ("isNetworkActivityIndicatorVisible")]
 		bool IsNetworkActivityIndicatorVisible { get; }
 
-		[Export ("sharedManager")]
+		//+ (AFNetworkActivityIndicatorManager *)sharedManager;
+		[Export ("sharedManager"), Static]
 		AFNetworkActivityIndicatorManager SharedManager { get; }
 
+		//- (void)incrementActivityCount;
 		[Export ("incrementActivityCount")]
 		void IncrementActivityCount ();
 
+		//- (void)decrementActivityCount;
 		[Export ("decrementActivityCount")]
 		void DecrementActivityCount ();
 	}
 
-	public delegate void AFPropertyListRequestOperationSuccess(NSUrlRequest request, NSHttpUrlResponse response, NSObject propertyList);
-	public delegate void AFPropertyListRequestOperationFailure(NSUrlRequest request, NSHttpUrlResponse response, NSError error, NSObject propertyList);
-
+	//@interface AFPropertyListRequestOperation : AFHTTPRequestOperation
 	[BaseType (typeof (AFHTTPRequestOperation))]
 	public partial interface AFPropertyListRequestOperation {
 
+		//@property (readonly, nonatomic) id responsePropertyList;
 		[Export ("responsePropertyList")]
 		NSObject ResponsePropertyList { get; }
 
+		//@property (nonatomic, assign) NSPropertyListReadOptions propertyListReadOptions;
 		[Export ("propertyListReadOptions")]
 		NSPropertyListReadOptions PropertyListReadOptions { get; set; }
 
+		//+ (AFPropertyListRequestOperation *)propertyListRequestOperationWithRequest:(NSURLRequest *)urlRequest
+		//	success:(void (^)(NSURLRequest *request, NSHTTPURLResponse *response, id propertyList))success
+		//		failure:(void (^)(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error, id propertyList))failure;
 		[Static, Export ("propertyListRequestOperationWithRequest:success:failure:")]
 		AFPropertyListRequestOperation PropertyListRequestOperationWithRequest (NSUrlRequest urlRequest, AFPropertyListRequestOperationSuccess success, AFPropertyListRequestOperationFailure failure);
 	}
 
+	//@interface AFURLConnectionOperation : NSOperation <NSURLConnectionDelegate, NSURLConnectionDataDelegate, NSCoding, NSCopying>
 	[BaseType (typeof (NSOperation))]
 	public partial interface AFURLConnectionOperation {
 
+		//@property (nonatomic, strong) NSSet *runLoopModes;
 		[Export ("runLoopModes")]
 		NSSet RunLoopModes { get; set; }
 
+		//@property (readonly, nonatomic, strong) NSURLRequest *request;
 		[Export ("request")]
 		NSUrlRequest Request { get; }
 
+		//@property (readonly, nonatomic, strong) NSURLResponse *response;
 		[Export ("response")]
 		NSUrlResponse Response { get; }
 
+		//@property (readonly, nonatomic, strong) NSError *error;
 		[Export ("error")]
 		NSError Error { get; }
 
+		//@property (readonly, nonatomic, strong) NSData *responseData;
 		[Export ("responseData")]
 		NSData ResponseData { get; }
 
+		//@property (readonly, nonatomic, copy) NSString *responseString;
 		[Export ("responseString")]
 		string ResponseString { get; }
 
+		//@property (nonatomic, strong) NSInputStream *inputStream;
 		[Export ("inputStream")]
 		NSInputStream InputStream { get; set; }
 
+		//@property (nonatomic, strong) NSOutputStream *outputStream;
 		[Export ("outputStream")]
 		NSOutputStream OutputStream { get; set; }
 
+		//- (id)initWithRequest:(NSURLRequest *)urlRequest;
 		[Export ("initWithRequest:")]
 		IntPtr Constructor (NSUrlRequest urlRequest);
 
+		//- (void)pause;
 		[Export ("pause")]
 		void Pause ();
 
+		//- (BOOL)isPaused;
 		[Export ("isPaused")]
 		bool IsPaused { get; }
 
+		//- (void)resume;
 		[Export ("resume")]
 		void Resume ();
 
 		/// TODO:
-//		[Export ("shouldExecuteAsBackgroundTaskWithExpirationHandler")]
-//		Delegate ShouldExecuteAsBackgroundTaskWithExpirationHandler { set; }
+		//[Export ("shouldExecuteAsBackgroundTaskWithExpirationHandler")]
+		//Delegate ShouldExecuteAsBackgroundTaskWithExpirationHandler { set; }
 	}
 
 	#endregion
