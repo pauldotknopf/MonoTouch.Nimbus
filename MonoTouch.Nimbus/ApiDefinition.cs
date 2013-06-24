@@ -10,67 +10,92 @@ namespace MonoTouch.Nimbus
 {
 	#region Core
 
-	//typedef void (^NIOperationBlock)(NIOperation* operation);
+	#region Delegates
+
+	//void (^NIOperationBlock)(NIOperation* operation);
 	public delegate void NIOperationBlock(NIOperation operation);
-	//typedef void (^NIOperationDidFailBlock)(NIOperation* operation, NSError* error);
+	//void (^NIOperationDidFailBlock)(NIOperation* operation, NSError* error);
 	public delegate void NIOperationDidFailBlock(NIOperation operation, NSError error);
 
+	#endregion
+
+	#region Operations
+
+	//@interface NIOperation : NSOperation
 	[BaseType (typeof (NSOperation))]
 	public partial interface NIOperation {
-		
+
+		//@property (readwrite, NI_WEAK) id<NIOperationDelegate> delegate;
 		[Export ("delegate"), NullAllowed]
 		NSObject WeakDelegate { get; set; }
 
 		[Wrap("WeakDelegate")]
 		NIOperationDelegate Delegate { get; set; }
 
+		//@property (readonly,  NI_STRONG) NSError* lastError;
 		[Export ("lastError")]
 		NSError LastError { get; }
-		
+
+		//@property (readwrite, assign) NSInteger tag;
 		[Export ("tag")]
 		int Tag { get; set; }
-		
+
+		//@property (readwrite, copy) NIOperationBlock didStartBlock;
 		[Export ("didStartBlock")]
 		NIOperationBlock DidStartBlock { get; set; }
-		
+
+		//@property (readwrite, copy) NIOperationBlock didFinishBlock;
 		[Export ("didFinishBlock")]
 		NIOperationBlock DidFinishBlock { get; set; }
-		
+
+		//@property (readwrite, copy) NIOperationDidFailBlock didFailWithErrorBlock;
 		[Export ("didFailWithErrorBlock")]
 		NIOperationDidFailBlock DidFailWithErrorBlock { get; set; }
-		
+
+		//@property (readwrite, copy) NIOperationBlock willFinishBlock;
 		[Export ("willFinishBlock")]
 		NIOperationBlock WillFinishBlock { get; set; }
-		
+
+		//- (void)didStart;
 		[Export ("didStart")]
 		void DidStart ();
-		
+
+		//- (void)didFinish;
 		[Export ("didFinish")]
 		void DidFinish ();
-		
+
+		//- (void)didFailWithError:(NSError *)error;
 		[Export ("didFailWithError:")]
 		void DidFailWithError (NSError error);
-		
+
+		//- (void)willFinish;
 		[Export ("willFinish")]
 		void WillFinish ();
 	}
-	
+
+	//@protocol NIOperationDelegate <NSObject>
 	[Model]
 	[BaseType(typeof(NSObject))]
 	public partial interface NIOperationDelegate {
-		
+
+		//- (void)nimbusOperationDidStart:(NIOperation *)operation;
 		[Export ("nimbusOperationDidStart:")]
 		void NimbusOperationDidStart (NIOperation operation);
-		
+
+		//- (void)nimbusOperationWillFinish:(NIOperation *)operation;
 		[Export ("nimbusOperationWillFinish:")]
 		void NimbusOperationWillFinish (NIOperation operation);
-		
+
+		//- (void)nimbusOperationDidFinish:(NIOperation *)operation;
 		[Export ("nimbusOperationDidFinish:")]
 		void NimbusOperationDidFinish (NIOperation operation);
-		
+
+		//- (void)nimbusOperationDidFail:(NIOperation *)operation withError:(NSError *)error;
 		[Export ("nimbusOperationDidFail:withError:")]
 		void NimbusOperationDidFail (NIOperation operation, NSError error);
 	}
+
+	#endregion
 
 	#region View Recycling
 
