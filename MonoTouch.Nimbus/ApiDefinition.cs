@@ -607,12 +607,12 @@ namespace MonoTouch.Nimbus
 		//		isLoading: (BOOL *)isLoading
 		//		originalPhotoDimensions: (CGSize *)originalPhotoDimensions;
 		[Export ("photoAlbumScrollView:photoAtIndex:photoSize:isLoading:originalPhotoDimensions:"), Abstract]
-		NSObject PhotoAlbumScrollView (NIPhotoAlbumScrollView photoAlbumScrollView, int photoIndex, out NIPhotoScrollViewPhotoSize photoSize, out bool isLoading, out SizeF originalPhotoDimensions);
+		NSObject LoadPhotoAtIndex (NIPhotoAlbumScrollView photoAlbumScrollView, int photoIndex, out NIPhotoScrollViewPhotoSize photoSize, out bool isLoading, out SizeF originalPhotoDimensions);
 
 		//- (void)photoAlbumScrollView: (NIPhotoAlbumScrollView *)photoAlbumScrollView
 		//	stopLoadingPhotoAtIndex: (NSInteger)photoIndex;
 		[Export ("photoAlbumScrollView:stopLoadingPhotoAtIndex:")]
-		void PhotoAlbumScrollView (NIPhotoAlbumScrollView photoAlbumScrollView, int photoIndex);
+		void StopLoadingPhotoAtIndex (NIPhotoAlbumScrollView photoAlbumScrollView, int photoIndex);
 	}
 
 	//@protocol NIPhotoAlbumScrollViewDelegate <NIPagingScrollViewDelegate>
