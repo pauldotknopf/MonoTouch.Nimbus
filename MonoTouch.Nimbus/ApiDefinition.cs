@@ -360,7 +360,7 @@ namespace MonoTouch.Nimbus
 
 		//- (UIView<NIPagingScrollViewPage> *)pagingScrollView:(NIPagingScrollView *)pagingScrollView pageViewForIndex:(NSInteger)pageIndex;
 		[Export ("pagingScrollView:pageViewForIndex:"), Abstract]
-		NSObject PagingScrollView (NIPagingScrollView pagingScrollView, int pageIndex);
+		NSObject PageViewForIndex (NIPagingScrollView pagingScrollView, int pageIndex);
 	}
 
 	//@protocol NIPagingScrollViewDelegate <UIScrollViewDelegate>
@@ -551,6 +551,7 @@ namespace MonoTouch.Nimbus
 
 	#endregion
 
+
 	#region Photos
 
 	///@interface NIPhotoAlbumScrollView : NIPagingScrollView <NIPhotoScrollViewDelegate> 
@@ -559,7 +560,7 @@ namespace MonoTouch.Nimbus
 
 		//- (UIView<NIPagingScrollViewPage> *)pagingScrollView:(NIPagingScrollView *)pagingScrollView pageViewForIndex:(NSInteger)pageIndex;
 		[Export ("pagingScrollView:pageViewForIndex:")]
-		UIView PagingScrollView (NSObject pagingScrollView, int pageIndex);
+		UIView PageViewForIndex (NSObject pagingScrollView, int pageIndex);
 
 		//@property (nonatomic, readwrite, NI_WEAK) id<NIPhotoAlbumScrollViewDataSource> dataSource;
 		[Export ("dataSource"), NullAllowed]
@@ -637,7 +638,7 @@ namespace MonoTouch.Nimbus
 	//@interface NIPhotoScrollView : UIView <
 	//	UIScrollViewDelegate,
 	//	NIPagingScrollViewPage> 
-	[BaseType (typeof (UIView))]
+	[BaseType (typeof (NIRecyclableView))]
 	public partial interface NIPhotoScrollView { //: UIScrollViewDelegate {
 
 		//@property (nonatomic, readwrite, assign, getter=isZoomingEnabled) BOOL zoomingIsEnabled; // default: yes
