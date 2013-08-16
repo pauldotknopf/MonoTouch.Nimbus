@@ -117,7 +117,7 @@ namespace MonoTouch.Nimbus
 	}
 
 	//@protocol NIRecyclableView <NSObject>
-	[BaseType(typeof(NSObject), Name="NIRecyclableView")]
+	[BaseType(typeof(NSObject))]
 	[Model]
 	public partial interface NIRecyclableViewProtocol {
 
