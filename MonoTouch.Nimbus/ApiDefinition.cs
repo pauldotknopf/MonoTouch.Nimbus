@@ -550,8 +550,7 @@ namespace MonoTouch.Nimbus
 	}
 
 	#endregion
-
-
+	
 	#region Photos
 
 	///@interface NIPhotoAlbumScrollView : NIPagingScrollView <NIPhotoScrollViewDelegate> 
@@ -822,6 +821,174 @@ namespace MonoTouch.Nimbus
 		//- (void)setChromeTitle;
 		[Export ("setChromeTitle")]
 		void SetChromeTitle ();
+	}
+
+	#endregion
+
+	#region Launcher
+
+	//@protocol NILauncherButtonView <NIRecyclableView>
+	[BaseType(typeof(NSObject))]
+	[Model]
+	public partial interface NILauncherButtonViewProtocol : NIRecyclableViewProtocol
+	{
+		//@property (nonatomic, readwrite, NI_STRONG) UIButton* button;
+		[Export("button")]
+		UIButton Button { get; set; }
+	}
+
+	// @interface NILauncherButtonView : NIRecyclableView <NILauncherButtonView, NILauncherViewObjectView>
+	[BaseType(typeof(NIRecyclableView))]
+	public partial interface NILauncherButtonView : NILauncherButtonViewProtocol
+	{
+		//- (id)initWithReuseIdentifier:(NSString *)reuseIdentifier;
+		[Export ("initWithReuseIdentifier:")]
+		IntPtr Constructor (string reuseIdentifier);
+
+		//@property (nonatomic, readwrite, copy) UILabel* label;
+		[Export("label", ArgumentSemantic.Copy)]
+		UILabel Label { get; set; }
+
+		//@property (nonatomic, readwrite, assign) UIEdgeInsets contentInset;
+		[Export("contentInset", ArgumentSemantic.Assign)]
+		UIEdgeInsets ContentInset { get; set; }
+	}
+
+	[BaseType(typeof(NSObject))]
+	[Model]
+	public partial interface NILauncherViewObjectProtocol
+	{
+		//@property (nonatomic, readwrite, copy) NSString* title;
+		[Export("title", ArgumentSemantic.Copy)]
+		string Title { get; set; }
+
+		//@property (nonatomic, readwrite, NI_STRONG) UIImage* image;
+		[Export("image")]
+		UIImage Image { get; set; }
+
+		//@property (nonatomic, readwrite, NI_STRONG) UIImage* image;
+		//- (Class)buttonViewClass;
+	}
+
+	//@interface NILauncherViewObject : NSObject <NILauncherViewObject, NSCoding>
+	[BaseType(typeof(NSObject))]
+	public partial interface NILauncherViewObject : NILauncherViewObjectProtocol
+	{
+		//- (id)initWithTitle:(NSString *)title image:(UIImage *)image;
+		[Export ("initWithTitle:image:")]
+		IntPtr Constructor (string title, UIImage image);
+
+		//+ (id)objectWithTitle:(NSString *)title image:(UIImage *)image;
+		[Export ("objectWithTitle:image:"), Static]
+		NILauncherViewObject ObjectWithTitle (string title, UIImage image);
+	}
+
+	[BaseType(typeof(NSObject))]
+	[Model]
+	public partial interface NILauncherViewObjectView
+	{
+		//- (void)shouldUpdateViewWithObject:(id)object;
+		[Export("shouldUpdateViewWithObject:")]
+	 	void ShowUpdateViewWithObject (NSObject o);
+	}
+
+	//@interface NILauncherViewController : UIViewController <NILauncherDelegate, NILauncherDataSource>
+	[BaseType(typeof(UIViewController))]
+	public partial interface NILauncherViewController : NILauncherDelegate, NILauncherDataSource
+	{
+		//@property (nonatomic, readwrite, NI_STRONG) NILauncherView* launcherView;
+		[Export("launcherView")]
+		NILauncherView LauncherView { get; set; }
+	}
+
+	[BaseType(typeof(UIView))]
+	public partial interface NILauncherView
+	{
+		//@property (nonatomic, readwrite, assign) NSInteger maxNumberOfButtonsPerPage; // Default: NSIntegerMax
+		[Export("maxNumberOfButtonsPerPage", ArgumentSemantic.Assign)]
+		int MaxNumberOfButtonsPerPage { get; set; }
+
+		//@property (nonatomic, readwrite, assign) UIEdgeInsets contentInsetForPages; // Default: 10px on all sides
+		[Export("contentInsetForPages", ArgumentSemantic.Assign)]
+		UIEdgeInsets ContentInsetForPages { get; set; }
+
+		//@property (nonatomic, readwrite, assign) CGSize buttonSize; // Default: 80x80
+		[Export("buttonSize", ArgumentSemantic.Assign)]
+		SizeF ButtonSize { get; set; }
+
+		//@property (nonatomic, readwrite, assign) NSInteger numberOfRows; // Default: NILauncherViewGridBasedOnButtonSize
+		[Export("numberOfRows", ArgumentSemantic.Assign)]
+		int NumberOfRows { get; set; }
+
+		//@property (nonatomic, readwrite, assign) NSInteger numberOfColumns; // Default: NILauncherViewGridBasedOnButtonSize
+		[Export("numberOfColumns", ArgumentSemantic.Assign)]
+		int NumberOfColumns { get; set; }
+
+		//- (void)reloadData;
+		[Export("reloadData")]
+		void ReloadData();
+
+		//@property (nonatomic, readwrite, NI_WEAK) id<NILauncherDelegate> delegate;
+		[Export ("delegate"), NullAllowed]
+		NSObject WeakDelegate { get; set; }
+
+		[Wrap("WeakDelegate")]
+		NILauncherDelegate Delegate { get; set; }
+
+		//@property (nonatomic, readwrite, NI_WEAK) id<NILauncherDataSource> dataSource;
+		[Export("dataSource"), NullAllowed]
+		NSObject WeakDataSource { get; set; }
+
+		[Wrap("WeakDataSource")]
+		NILauncherDataSource DataSource { get; set; }
+
+		//- (UIView<NILauncherButtonView> *)dequeueReusableViewWithIdentifier:(NSString *)identifier;
+		[Export("dequeueReusableViewWithIdentifier:")]
+		UIView DequeueReusableViewWithIdentifier (string identifier);
+
+		//- (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration;
+		[Export("willRotateToInterfaceOrientation:duration:")]
+		void WillRotateToInterfaceOrientation (UIInterfaceOrientation toInterfaceOrientation, double duration);
+
+		//- (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration;
+		[Export("willAnimateRotationToInterfaceOrientation:duration:")]
+		void WillAnimateRotationToInterfaceOrientation (UIInterfaceOrientation toInterfaceOrientation, double duration);
+	}
+
+	//@protocol NILauncherDataSource <NSObject>
+	[BaseType(typeof(NSObject))]
+	[Model]
+	public partial interface NILauncherDataSource
+	{
+		//- (NSInteger)launcherView:(NILauncherView *)launcherView numberOfButtonsInPage:(NSInteger)page;
+		[Export("launcherView:numberOfButtonsInPage:"), Abstract]
+		int NumberOfButtonsInPage (NILauncherView launcherView, int page);
+
+		//- (UIView<NILauncherButtonView> *)launcherView:(NILauncherView *)launcherView buttonViewForPage:(NSInteger)page atIndex:(NSInteger)index;
+		[Export("launcherView:buttonViewForPage:atIndex:"), Abstract]
+		UIView ButtonViewForPage (NILauncherView launcherView, int page, int index);
+
+		//- (NSInteger)numberOfPagesInLauncherView:(NILauncherView *)launcherView;
+		[Export("numberOfPagesInLauncherView:")]
+		int NumberOfPagesInLauncherView(NILauncherView launcherView);
+
+		//- (NSInteger)numberOfRowsPerPageInLauncherView:(NILauncherView *)launcherView;
+		[Export("numberOfRowsPerPageInLauncherView:")]
+		int NumberOfRowsPerPageInLauncherView(NILauncherView launcherView);
+	
+		//- (NSInteger)numberOfColumnsPerPageInLauncherView:(NILauncherView *)launcherView;
+		[Export("numberOfColumnsPerPageInLauncherView:")]
+		int NumberOfColumnsPerPageInLauncherView(NILauncherView launcherView);
+	}
+
+	//@protocol NILauncherDelegate <NSObject>
+	[BaseType(typeof(NSObject))]
+	[Model]
+	public partial interface NILauncherDelegate
+	{
+		//- (void)launcherView:(NILauncherView *)launcherView didSelectItemOnPage:(NSInteger)page atIndex:(NSInteger)index;
+		[Export("launcherView:didSelectItemOnPage:atIndex:")]
+		void DidSelectItemOnPage (NILauncherView launcherView, int page, int index);
 	}
 
 	#endregion

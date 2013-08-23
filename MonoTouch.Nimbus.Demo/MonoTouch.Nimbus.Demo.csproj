@@ -88,18 +88,21 @@
     <Folder Include="PagingScrollView\" />
     <Folder Include="ViewRecycling\" />
     <Folder Include="Photos\" />
+    <Folder Include="Launcher\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Info.plist" />
+    <None Include="Photos\DribblePhotoAlbumViewController.cs" />
+    <None Include="Photos\NetworkPhotoAlbumViewController.cs" />
+    <None Include="Photos\CatalogController.cs" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Main.cs" />
     <Compile Include="AppDelegate.cs" />
     <Compile Include="ViewRecycling\ViewRecyclingController.cs" />
     <Compile Include="PagingScrollView\BasicInstantiationPagingScrollViewController.cs" />
-    <Compile Include="Photos\NetworkPhotoAlbumViewController.cs" />
-    <Compile Include="Photos\DribblePhotoAlbumViewController.cs" />
-    <Compile Include="Photos\CatalogController.cs" />
+    <Compile Include="Launcher\LauncherViewController.cs" />
+    <Compile Include="Launcher\BasicInstantiationLauncherViewController.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
