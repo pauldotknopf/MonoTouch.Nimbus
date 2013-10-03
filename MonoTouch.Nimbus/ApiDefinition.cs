@@ -673,7 +673,7 @@ namespace MonoTouch.Nimbus
 
 		//- (void)setImage:(UIImage *)image photoSize:(NIPhotoScrollViewPhotoSize)photoSize;
 		[Export ("setImage:photoSize:")]
-		void SetImage (UIImage image, NIPhotoScrollViewPhotoSize photoSize);
+		void SetImage ([NullAllowed]UIImage image, NIPhotoScrollViewPhotoSize photoSize);
 
 		//@property (nonatomic, assign, getter = isLoading) BOOL loading;
 		[Export ("loading")]
