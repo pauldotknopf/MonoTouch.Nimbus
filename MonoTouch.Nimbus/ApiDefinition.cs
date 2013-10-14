@@ -1205,6 +1205,9 @@ namespace MonoTouch.Nimbus
 	[BaseType (typeof (AFURLConnectionOperation))]
 	public partial interface AFHTTPRequestOperation {
 
+		[Export("initWithRequest:")]
+		IntPtr Constructor(NSUrlRequest request);
+
 		//@property (readonly, nonatomic, strong) NSHTTPURLResponse *response;
 		[Export ("response")]
 		NSHttpUrlResponse Response { get; }
@@ -1245,9 +1248,10 @@ namespace MonoTouch.Nimbus
 		[Static, Export ("canProcessRequest:")]
 		bool CanProcessRequest (NSUrlRequest urlRequest);
 
-		// TODO:
-		//[Export ("completionBlockWithSuccess:failure")]
-		//Delegate CompletionBlockWithSuccess { set; }
+		//- (void)setCompletionBlockWithSuccess:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success
+		//failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure;
+		[Export ("setCompletionBlockWithSuccess:failure:")]
+		void SetCompletionBlockWithSuccess(AFHTTPClientRequestSuccess success, AFHTTPClientRequestFailure failure);
 	}
 
 	//@interface AFImageRequestOperation : AFHTTPRequestOperation
